@@ -1,4 +1,4 @@
-"""Referência independente das RN01–RN19; taxas e participações entre 0 e 1.
+"""Referência independente das RN01 a RN19; taxas e participações entre 0 e 1.
 
 RN02 limita somente a série mensal; as demais análises usam todo o universo RN01.
 RN07 exclui pedidos somente de P2. Medianas ignoram etapas ausentes, sem imputar.
@@ -210,7 +210,7 @@ def normalizar(valor):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Validação independente em pandas das RN01–RN19")
+    parser = argparse.ArgumentParser(description="Validação independente em pandas das RN01 a RN19")
     parser.add_argument("pasta_raw", nargs="?", type=Path,
                         default=Path(os.environ.get("OLIST_RAW_DIR", PADRAO)))
     args = parser.parse_args()

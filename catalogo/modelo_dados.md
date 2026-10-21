@@ -94,4 +94,4 @@ O diagrama mostra só os atributos principais. A lista completa, com domínios e
 
 ## Integridade no Unity Catalog
 
-O notebook 03 declara 7 chaves primárias e 14 estrangeiras. No Databricks essas restrições são informativas: documentam o modelo e ajudam o otimizador, mas não bloqueiam a carga. A integridade é verificada de fato pelo notebook 04: unicidade e órfãos, com zero violações nas regras bloqueantes (ver `evidencias/execucao_databricks/04_qualidade_dados.html`).
+O notebook 03 declara 7 chaves primárias e 14 estrangeiras. No Databricks essas restrições são informativas: documentam o modelo e ajudam o otimizador, mas não bloqueiam a carga. A integridade é verificada de fato pelo notebook 04: unicidade e órfãos, com zero violações nas regras bloqueantes (ver [`notebooks/executados/04_qualidade_dados.ipynb`](../notebooks/executados/04_qualidade_dados.ipynb)).

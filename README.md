@@ -94,19 +94,19 @@ flowchart LR
     G --> A[ANÁLISE<br/>SQL e gráficos<br/>P1 a P6]
 ```
 
-| Notebook | Faz | Tempo na última execução |
-|---|---|---:|
-| [`01_coleta_bronze`](notebooks/01_coleta_bronze.py) | Cria esquemas e volume, baixa os CSV, grava a bronze e confere as contagens | 78 s |
-| [`02_transformacao_silver`](notebooks/02_transformacao_silver.py) | Tipa, limpa, deduplica, concilia geolocalização e aplica as regras de negócio | 51 s |
-| [`03_modelo_gold`](notebooks/03_modelo_gold.py) | Constrói o modelo dimensional, declara chaves e grava o catálogo no Unity Catalog | 159 s |
-| [`04_qualidade_dados`](notebooks/04_qualidade_dados.py) | Avalia cada atributo e 21 regras de qualidade | 53 s |
-| [`05_analise_perguntas`](notebooks/05_analise_perguntas.py) | Responde P1 a P6 em SQL e gera os gráficos | 27 s |
+| Notebook (código-fonte) | Faz | Execução na nuvem, com saídas | Tempo |
+|---|---|---|---:|
+| [`01_coleta_bronze`](notebooks/01_coleta_bronze.py) | Cria esquemas e volume, baixa os CSV, grava a bronze e confere as contagens | [ver resultado](notebooks/executados/01_coleta_bronze.ipynb) | 78 s |
+| [`02_transformacao_silver`](notebooks/02_transformacao_silver.py) | Tipa, limpa, deduplica, concilia geolocalização e aplica as regras de negócio | [ver resultado](notebooks/executados/02_transformacao_silver.ipynb) | 51 s |
+| [`03_modelo_gold`](notebooks/03_modelo_gold.py) | Constrói o modelo dimensional, declara chaves e grava o catálogo no Unity Catalog | [ver resultado](notebooks/executados/03_modelo_gold.ipynb) | 159 s |
+| [`04_qualidade_dados`](notebooks/04_qualidade_dados.py) | Avalia cada atributo e 21 regras de qualidade | [ver resultado](notebooks/executados/04_qualidade_dados.ipynb) | 53 s |
+| [`05_analise_perguntas`](notebooks/05_analise_perguntas.py) | Responde P1 a P6 em SQL e gera os gráficos | [ver resultado](notebooks/executados/05_analise_perguntas.ipynb) | 27 s |
 
 ![Execução do job no Databricks](evidencias/capturas/01_job_executado.png)
 
 *Figura 1. Execução do job `mvp_olist_pipeline` no Databricks: as cinco tarefas em sequência, todas concluídas com sucesso.*
 
-Os cinco notebooks rodam como um job do Lakeflow Jobs em computação *serverless*, cada tarefa dependente da anterior ([definição](scripts/job_pipeline_olist.json)). Cada notebook termina com verificações que interrompem o job se algo sair do esperado: contagens da bronze iguais às dos arquivos, chaves únicas na silver, catálogo idêntico ao modelo na gold e integridade referencial na qualidade. O pipeline é idempotente: reexecutado, sobrescreve as tabelas e dispensa o download quando os arquivos já estão no volume.
+Os arquivos `.py` são o código-fonte no formato do Databricks, importado pelo Git folder. Os `.ipynb` em [`notebooks/executados/`](notebooks/executados/) são as mesmas execuções exportadas do job, com todas as tabelas e gráficos, para leitura direta no GitHub. Os cinco notebooks rodam como um job do Lakeflow Jobs em computação *serverless*, cada tarefa dependente da anterior ([definição](scripts/job_pipeline_olist.json)). Cada notebook termina com verificações que interrompem o job se algo sair do esperado: contagens da bronze iguais às dos arquivos, chaves únicas na silver, catálogo idêntico ao modelo na gold e integridade referencial na qualidade. O pipeline é idempotente: reexecutado, sobrescreve as tabelas e dispensa o download quando os arquivos já estão no volume.
 
 ## 4. Modelagem e Catálogo de Dados
 
@@ -139,7 +139,7 @@ As 19 regras de negócio aplicadas na transformação estão em [`catalogo/regra
 
 ### 6.1 Qualidade dos dados: o conjunto é íntegro, e as falhas encontradas estão isoladas e tratadas
 
-A qualidade foi avaliada em três níveis, todos gravados em tabelas consultáveis na gold: as 52 colunas da origem, os 75 atributos do modelo contra o catálogo e 21 regras. Resultado completo, com cada consulta, em [`evidencias/execucao_databricks/04_qualidade_dados.html`](evidencias/execucao_databricks/04_qualidade_dados.html).
+A qualidade foi avaliada em três níveis, todos gravados em tabelas consultáveis na gold: as 52 colunas da origem, os 75 atributos do modelo contra o catálogo e 21 regras. Resultado completo, com cada consulta, em [`notebooks/executados/04_qualidade_dados.ipynb`](notebooks/executados/04_qualidade_dados.ipynb).
 
 **Nenhuma regra bloqueante foi violada.** Não há chave duplicada nas fatos nem registro órfão: zero itens sem pedido, sem produto ou sem vendedor; zero pedidos sem cliente; zero pagamentos ou avaliações sem pedido.
 
@@ -160,7 +160,7 @@ A qualidade foi avaliada em três níveis, todos gravados em tabelas consultáve
 | Acurácia | Prazo-limite de envio depois de 2018 (até abril/2020) | 4 itens | Mantido; não altera taxas |
 | Acurácia | Produto com peso zero; pagamento com zero parcelas ou valor zero | 4; 2; 9 | Mantidos; atributos fora das perguntas |
 | Conformidade | Atraso fora da faixa esperada de ±60 dias (até 188 dias) | 113 (0,1%) | Mantidos na faixa "15 dias ou mais": são atrasos reais extremos |
-| Atualidade | Última compra registrada em 17/10/2018 | 2.926 dias antes da análise | Os achados descrevem a operação de 2017–2018, não a atual |
+| Atualidade | Última compra registrada em 17/10/2018 | 2.926 dias antes da análise | Os achados descrevem a operação de 2017 a 2018, não a atual |
 
 ### 6.2 P1 · O atraso não é crônico: quase metade dele se concentra em três meses
 
@@ -304,7 +304,8 @@ Os números deste README vêm do Databricks (PySpark e SQL sobre a gold). Para v
 
 | Evidência | O que comprova |
 |---|---|
-| [`evidencias/execucao_databricks/`](evidencias/execucao_databricks/) | Os cinco notebooks exportados do job no Databricks com todas as saídas, tabelas e gráficos. Baixe e abra no navegador |
+| [`notebooks/executados/`](notebooks/executados/) | Os cinco notebooks executados no job do Databricks, com todas as saídas, legíveis no GitHub |
+| [`evidencias/execucao_databricks/`](evidencias/execucao_databricks/) | A mesma execução no formato HTML original do Databricks (baixe e abra no navegador) |
 | [`evidencias/persistencia_nuvem.md`](evidencias/persistencia_nuvem.md) | As 28 tabelas Delta no Unity Catalog, com formato, linhas e data de criação, consultadas pela API de SQL |
 | [`evidencias/graficos/`](evidencias/graficos/) | Os seis gráficos, gerados no Databricks e gravados no volume `olist_gold.graficos` |
 | [`evidencias/resultado_databricks.json`](evidencias/resultado_databricks.json) | Números de P1 a P6 gravados pela execução na nuvem |

@@ -9,6 +9,7 @@ Requer a Databricks CLI autenticada (databricks auth login --profile olist). O s
 4. baixa os gráficos e o resumo gerados no volume olist_gold.graficos.
 """
 import argparse, base64, json, re, shutil, subprocess, time, urllib.parse
+from html import escape
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -22,10 +23,50 @@ def cli(*args, perfil):
     return json.loads(saida) if saida.strip() else {}
 
 
-def celulas_sem_saida(html):
+def modelo_do_html(html):
     modelo = re.search(r"__DATABRICKS_NOTEBOOK_MODEL = '([^']+)'", html).group(1)
-    modelo = json.loads(urllib.parse.unquote(base64.b64decode(modelo).decode()))
-    return [i for i, c in enumerate(modelo["commands"]) if not c["command"].startswith("%md") and not c.get("results")]
+    return json.loads(urllib.parse.unquote(base64.b64decode(modelo).decode()))
+
+
+def celulas_sem_saida(html):
+    return [i for i, c in enumerate(modelo_do_html(html)["commands"])
+            if not c["command"].startswith("%md") and not c.get("results")]
+
+
+def tabela_html(saida):
+    cab = "".join(f"<th>{escape(s['name'])}</th>" for s in saida.get("schema", []))
+    linhas = "".join("<tr>" + "".join(f"<td>{escape(str(v))}</td>" for v in linha) + "</tr>"
+                     for linha in saida["data"][:60])
+    resto = len(saida["data"]) - 60
+    nota = f"<p>... mais {resto} linhas</p>" if resto > 0 else ""
+    return f"<table><thead><tr>{cab}</tr></thead><tbody>{linhas}</tbody></table>{nota}"
+
+
+def para_ipynb(html, destino):
+    """Converte a execução exportada do Databricks em .ipynb com as saídas, legível no GitHub."""
+    celulas = []
+    for c in sorted(modelo_do_html(html)["commands"], key=lambda c: c["position"]):
+        fonte = c["command"]
+        if fonte.startswith("%md"):
+            celulas.append({"cell_type": "markdown", "metadata": {}, "source": fonte[3:].lstrip("\n")})
+            continue
+        saidas = []
+        for s in (c.get("results") or {}).get("data") or []:
+            if not isinstance(s, dict):
+                continue
+            if s.get("type") in ("ansi", "text") and s["data"].strip():
+                texto = re.sub(r"\x1b\[[0-9;]*m", "", s["data"])
+                saidas.append({"output_type": "stream", "name": "stdout", "text": texto})
+            elif s.get("type") == "table":
+                saidas.append({"output_type": "display_data", "metadata": {}, "data": {"text/html": tabela_html(s)}})
+            elif s.get("type") == "mimeBundle" and "image/png" in s["data"]:
+                saidas.append({"output_type": "display_data", "metadata": {},
+                               "data": {"image/png": s["data"]["image/png"], "text/plain": "<Figure>"}})
+        celulas.append({"cell_type": "code", "execution_count": None, "metadata": {}, "source": fonte, "outputs": saidas})
+    nb = {"cells": celulas, "metadata": {"kernelspec": {"name": "python3", "display_name": "Python 3"},
+                                         "language_info": {"name": "python"}}, "nbformat": 4, "nbformat_minor": 5}
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    destino.write_text(json.dumps(nb, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
 def main():
@@ -55,6 +96,7 @@ def main():
                 break
             time.sleep(15)
         (pasta / f"{t['task_key']}.html").write_text(html, encoding="utf-8")
+        para_ipynb(html, RAIZ / "notebooks" / "executados" / f"{t['task_key']}.ipynb")
         duracao = round(t.get("execution_duration", 0) / 1000)
         print(f"  {t['task_key']}: {t['state'].get('result_state')}, {duracao} s, células sem saída: {faltam or 'nenhuma'}")
 
