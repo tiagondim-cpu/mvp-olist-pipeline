@@ -96,6 +96,8 @@ for nome in ARQUIVOS:
           .withColumn("_ingestao_em", F.current_timestamp()))
     (df.write.mode("overwrite").option("overwriteSchema", True)
        .saveAsTable(f"{CATALOGO}.olist_bronze.{tabela}"))
+    spark.sql(f"COMMENT ON TABLE {CATALOGO}.olist_bronze.{tabela} IS "
+              f"'Cópia fiel de {nome}: colunas da origem como texto, mais arquivo de origem e momento da ingestão'")
     tamanho = dbutils.fs.ls(f"{VOLUME}/{nome}")[0].size
     registro.append((nome, f"{CATALOGO}.olist_bronze.{tabela}", tamanho, df.count(), len(df.columns) - 2))
 
@@ -105,6 +107,7 @@ registro_df = (spark.createDataFrame(registro, "arquivo string, tabela string, b
                .withColumn("formato_original", F.lit("CSV, UTF-8, separador vírgula"))
                .withColumn("coletado_em", F.current_timestamp()))
 registro_df.write.mode("overwrite").option("overwriteSchema", True).saveAsTable(f"{CATALOGO}.olist_bronze.registro_coleta")
+spark.sql(f"COMMENT ON TABLE {CATALOGO}.olist_bronze.registro_coleta IS 'Registro da coleta: arquivo, volume, linhas, fonte, licença e data'")
 display(registro_df)
 
 # COMMAND ----------

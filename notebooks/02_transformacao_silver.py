@@ -13,8 +13,20 @@ CATALOGO = dbutils.widgets.get("catalogo")
 BRONZE, SILVER = f"{CATALOGO}.olist_bronze", f"{CATALOGO}.olist_silver"
 TS = "yyyy-MM-dd HH:mm:ss"
 
+DESCRICAO = {
+    "itens_pedido": "Itens de pedido tipados",
+    "pedidos": "Pedidos tipados, com etapas do lead time, atraso e flags das regras RN01, RN04, RN06, RN07 e RN08",
+    "avaliacoes": "Uma avaliação por pedido, deduplicada pela regra RN10",
+    "geo_prefixo": "Coordenada mediana por prefixo de CEP, só com pontos dentro do Brasil (RN12 e RN13)",
+    "clientes": "Clientes tipados, UF em maiúsculas",
+    "vendedores": "Vendedores tipados, UF em maiúsculas",
+    "produtos": "Produtos com categoria traduzida e sem nulos de categoria (RN16)",
+    "pagamentos": "Linhas de pagamento tipadas",
+}
+
 def salvar(df, nome):
     df.write.mode("overwrite").option("overwriteSchema", True).saveAsTable(f"{SILVER}.{nome}")
+    spark.sql(f"COMMENT ON TABLE {SILVER}.{nome} IS '{DESCRICAO[nome]}'")
     print(f"{SILVER}.{nome}: {spark.table(f'{SILVER}.{nome}').count():,} linhas".replace(",", "."))
 
 def dias(fim, inicio):

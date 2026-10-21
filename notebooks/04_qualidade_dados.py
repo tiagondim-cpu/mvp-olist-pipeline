@@ -21,8 +21,9 @@ CATALOGO = dbutils.widgets.get("catalogo")
 BRONZE, SILVER, GOLD = (f"{CATALOGO}.olist_{c}" for c in ("bronze", "silver", "gold"))
 catalogo = pd.read_csv(os.path.join(os.getcwd(), "..", "catalogo", "catalogo_dados.csv"), sep=";", dtype=str).fillna("")
 
-def gravar(pdf, nome):
+def gravar(pdf, nome, descricao):
     spark.createDataFrame(pdf).write.mode("overwrite").option("overwriteSchema", True).saveAsTable(f"{GOLD}.{nome}")
+    spark.sql(f"COMMENT ON TABLE {GOLD}.{nome} IS '{descricao}'")
 
 # COMMAND ----------
 
@@ -45,7 +46,7 @@ for t in [r.tableName for r in spark.sql(f"SHOW TABLES IN {BRONZE}").collect() i
                        "pct_ausentes": round(100 * r[f"nulo_{c}"] / r["_n"], 2),
                        "distintos": r[f"dist_{c}"]})
 dq_bronze = pd.DataFrame(linhas)
-gravar(dq_bronze, "dq_bronze_atributos")
+gravar(dq_bronze, "dq_bronze_atributos", "Qualidade: ausências e cardinalidade de cada coluna da origem")
 display(dq_bronze.sort_values("pct_ausentes", ascending=False))
 
 # COMMAND ----------
@@ -88,7 +89,7 @@ for tabela, grupo in catalogo.groupby("tabela", sort=False):
                        "dominio": r.categorias or (f"[{r.dominio_min}, {r.dominio_max}]" if r.dominio_min else "livre"),
                        "fora_do_dominio": agg[f"fora_{r.atributo}"]})
 dq_gold = pd.DataFrame(linhas)
-gravar(dq_gold, "dq_gold_atributos")
+gravar(dq_gold, "dq_gold_atributos", "Qualidade: cada coluna do modelo conferida contra o Catálogo de Dados")
 display(dq_gold)
 
 # COMMAND ----------
@@ -160,6 +161,6 @@ resultado = pd.DataFrame([{"dimensao": d, "regra": n, "violacoes": spark.sql(q).
                           for d, n, q, e in REGRAS])
 resultado["status"] = resultado.apply(
     lambda r: "FALHA" if r.esperado == "zero" and r.violacoes > 0 else ("ok" if r.esperado == "zero" else r.esperado), axis=1)
-gravar(resultado, "dq_regras")
+gravar(resultado, "dq_regras", "Qualidade: regras de unicidade, integridade, consistência, acurácia e atualidade")
 display(resultado[["dimensao", "regra", "violacoes", "status"]])
 assert (resultado.status != "FALHA").all(), "Regra bloqueante violada"

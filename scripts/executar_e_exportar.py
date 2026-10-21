@@ -18,7 +18,7 @@ JOB, REPO = "mvp_olist_pipeline", "/Workspace/Users/tiagondim@gmail.com/mvp-olis
 
 
 def cli(*args, perfil):
-    saida = subprocess.run([DB, *args, "-p", perfil, "-o", "json"], capture_output=True, text=True, check=True).stdout
+    saida = subprocess.run([DB, *args, "-p", perfil, "-o", "json"], capture_output=True, text=True, encoding="utf-8", check=True).stdout
     return json.loads(saida) if saida.strip() else {}
 
 
@@ -63,6 +63,37 @@ def main():
                     "-p", a.perfil], check=True, capture_output=True)
     (graficos / "resultado_databricks.json").replace(EVID / "resultado_databricks.json")
     print("Gráficos e resumo baixados em", EVID)
+    registrar_persistencia(a.perfil)
+
+
+def sql(consulta, perfil, warehouse):
+    corpo = json.dumps({"warehouse_id": warehouse, "statement": consulta, "wait_timeout": "50s"})
+    r = subprocess.run([DB, "api", "post", "/api/2.0/sql/statements", "--json", corpo, "-p", perfil],
+                       capture_output=True, text=True, encoding="utf-8", check=True)
+    r = json.loads(r.stdout)
+    assert r["status"]["state"] == "SUCCEEDED", r["status"]
+    cols = [c["name"] for c in r["manifest"]["schema"]["columns"]]
+    return cols, r.get("result", {}).get("data_array", [])
+
+
+def registrar_persistencia(perfil):
+    """Consulta o Unity Catalog e grava a prova de que as tabelas estão persistidas na nuvem."""
+    warehouse = cli("warehouses", "list", perfil=perfil)[0]["id"]
+    _, tabelas = sql("""SELECT table_schema, table_name, data_source_format, created, comment
+                        FROM workspace.information_schema.tables
+                        WHERE table_schema LIKE 'olist_%' ORDER BY table_schema, table_name""", perfil, warehouse)
+    contagens = " UNION ALL ".join(f"SELECT '{s}.{t}' AS tabela, count(*) AS linhas FROM workspace.{s}.{t}"
+                                   for s, t, *_ in tabelas)
+    linhas = dict(sql(contagens, perfil, warehouse)[1])
+    md = ["# Persistência na nuvem", "",
+          "Tabelas Delta no Unity Catalog do workspace Databricks Free Edition (catálogo `workspace`), "
+          "consultadas pela API de SQL depois da execução do job. Gerado por `scripts/executar_e_exportar.py`.", "",
+          "| Esquema | Tabela | Formato | Linhas | Criada em (UTC) | Descrição |", "|---|---|---|---:|---|---|"]
+    for s, t, fmt, criada, comentario in tabelas:
+        n = f"{int(linhas[f'{s}.{t}']):,}".replace(",", ".")
+        md.append(f"| {s} | {t} | {fmt} | {n} | {criada[:19].replace('T', ' ')} | {comentario or ''} |")
+    (EVID / "persistencia_nuvem.md").write_text("\n".join(md) + "\n", encoding="utf-8")
+    print(f"Persistência registrada: {len(tabelas)} tabelas")
 
 
 if __name__ == "__main__":
