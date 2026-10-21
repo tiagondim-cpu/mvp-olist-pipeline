@@ -6,10 +6,15 @@ Pipeline de dados em nuvem (Databricks Free Edition, arquitetura medalhão com D
 |---|---|
 | Estudante | Tiago Andre Gondim |
 | Matrícula | 231013476 |
+| Disciplina | EPR0050, Projeto de Sistemas de Produção 8 |
+| Turma | T01, 2026.2 |
 | Instituição | Universidade de Brasília, Departamento de Engenharia de Produção |
 | Professor | André Luiz Marques Serrano |
 | Trabalho | MVP (*minimum viable product*), pipeline de dados em nuvem, individual |
 | Plataforma | Databricks Free Edition (Spark, Delta Lake, Unity Catalog, Lakeflow Jobs) |
+| Apresentação | [`apresentacao/`](apresentacao/) (PDF e PowerPoint) |
+
+> **Relação com atividade anterior.** A base Olist foi usada, numa análise exploratória em notebook, na atividade de PSP3 (EPR0074), que estudou só a relação entre atraso e nota. Este MVP é um trabalho novo: tem outra pergunta central (onde o prazo falha e quem deve agir), uma hipótese própria, cinco perguntas que não estavam naquela atividade e um pipeline em nuvem com modelagem, catálogo e qualidade. A pergunta P5 reproduz, agora dentro do pipeline, o resultado daquela análise, e os números coincidem, o que funciona como verificação cruzada.
 
 ## Resumo executivo
 
