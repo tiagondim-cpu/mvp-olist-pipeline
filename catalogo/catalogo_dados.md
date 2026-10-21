@@ -95,7 +95,7 @@ Como ler: *domínio* é a faixa esperada pelo negócio. Valor fora dela não é 
 | `flag_postagem_tardia` | booleano | Postado depois do prazo-limite de envio do vendedor (RN08) | true, false | 2 categorias | 1.784 | 0 | não | Pedido não postado ou sem itens | order_delivered_carrier_date maior que o máximo de shipping_limit_date dos itens |
 | `origem_atraso` | categórico | Etapa a que se atribui o atraso (RN09) | vendedor, transporte | 2 categorias | 92.907 | 0 | não | Pedido não atrasado | vendedor se flag_postagem_tardia, transporte caso contrário |
 | `flag_inconsistencia_temporal` | booleano | Sequência de datas impossível (RN07) | true, false | 2 categorias | 0 | 0 | sim | - | Alguma etapa do lead time com duração negativa |
-| `distancia_km` | numérico | Distância em linha reta entre vendedor e cliente (RN14) | 0 a 4500 | 0,00 a 3.579,30 | 2.537 | 0 | não | Pedido com vários vendedores ou prefixo sem coordenada | Haversine entre as coordenadas de dim_vendedor e dim_cliente |
+| `distancia_km` | numérico | Distância em linha reta entre vendedor e cliente (RN14) | 0 a 4500 | 0,00 a 3.579,34 | 2.537 | 0 | não | Pedido com vários vendedores ou prefixo sem coordenada | Haversine entre as coordenadas de dim_vendedor e dim_cliente |
 | `nota_avaliacao` | numérico | Nota dada pelo cliente (RN10) | 1 a 5 | 1 a 5 | 768 | 0 | não | Pedido sem avaliação | olist_order_reviews_dataset.review_score após deduplicação |
 | `flag_avaliacao_ruim` | booleano | Nota 1 ou 2 (RN11) | true, false | 2 categorias | 768 | 0 | não | Pedido sem avaliação | Derivado de nota_avaliacao |
 

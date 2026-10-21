@@ -1,0 +1,655 @@
+{
+ "p1": {
+  "global": {
+   "pedidos_entregues": 96470.0,
+   "atrasados": 6534.0,
+   "taxa_atraso": 0.0677
+  },
+  "serie": [
+   {
+    "ano_mes": "2017-01",
+    "pedidos": 750,
+    "atrasados": 22,
+    "taxa_atraso": 0.0293,
+    "prazo_prometido_medio": 40.2
+   },
+   {
+    "ano_mes": "2017-02",
+    "pedidos": 1653,
+    "atrasados": 49,
+    "taxa_atraso": 0.0296,
+    "prazo_prometido_medio": 32.5
+   },
+   {
+    "ano_mes": "2017-03",
+    "pedidos": 2546,
+    "atrasados": 116,
+    "taxa_atraso": 0.0456,
+    "prazo_prometido_medio": 25.4
+   },
+   {
+    "ano_mes": "2017-04",
+    "pedidos": 2303,
+    "atrasados": 151,
+    "taxa_atraso": 0.0656,
+    "prazo_prometido_medio": 28.0
+   },
+   {
+    "ano_mes": "2017-05",
+    "pedidos": 3545,
+    "atrasados": 106,
+    "taxa_atraso": 0.0299,
+    "prazo_prometido_medio": 24.9
+   },
+   {
+    "ano_mes": "2017-06",
+    "pedidos": 3135,
+    "atrasados": 95,
+    "taxa_atraso": 0.0303,
+    "prazo_prometido_medio": 24.7
+   },
+   {
+    "ano_mes": "2017-07",
+    "pedidos": 3872,
+    "atrasados": 108,
+    "taxa_atraso": 0.0279,
+    "prazo_prometido_medio": 24.0
+   },
+   {
+    "ano_mes": "2017-08",
+    "pedidos": 4193,
+    "atrasados": 122,
+    "taxa_atraso": 0.0291,
+    "prazo_prometido_medio": 24.1
+   },
+   {
+    "ano_mes": "2017-09",
+    "pedidos": 4150,
+    "atrasados": 182,
+    "taxa_atraso": 0.0439,
+    "prazo_prometido_medio": 23.1
+   },
+   {
+    "ano_mes": "2017-10",
+    "pedidos": 4478,
+    "atrasados": 187,
+    "taxa_atraso": 0.0418,
+    "prazo_prometido_medio": 23.7
+   },
+   {
+    "ano_mes": "2017-11",
+    "pedidos": 7288,
+    "atrasados": 904,
+    "taxa_atraso": 0.124,
+    "prazo_prometido_medio": 23.2
+   },
+   {
+    "ano_mes": "2017-12",
+    "pedidos": 5513,
+    "atrasados": 411,
+    "taxa_atraso": 0.0746,
+    "prazo_prometido_medio": 28.3
+   },
+   {
+    "ano_mes": "2018-01",
+    "pedidos": 7069,
+    "atrasados": 403,
+    "taxa_atraso": 0.057,
+    "prazo_prometido_medio": 26.9
+   },
+   {
+    "ano_mes": "2018-02",
+    "pedidos": 6555,
+    "atrasados": 926,
+    "taxa_atraso": 0.1413,
+    "prazo_prometido_medio": 25.2
+   },
+   {
+    "ano_mes": "2018-03",
+    "pedidos": 7003,
+    "atrasados": 1328,
+    "taxa_atraso": 0.1896,
+    "prazo_prometido_medio": 22.7
+   },
+   {
+    "ano_mes": "2018-04",
+    "pedidos": 6798,
+    "atrasados": 306,
+    "taxa_atraso": 0.045,
+    "prazo_prometido_medio": 24.3
+   },
+   {
+    "ano_mes": "2018-05",
+    "pedidos": 6749,
+    "atrasados": 443,
+    "taxa_atraso": 0.0656,
+    "prazo_prometido_medio": 23.5
+   },
+   {
+    "ano_mes": "2018-06",
+    "pedidos": 6096,
+    "atrasados": 71,
+    "taxa_atraso": 0.0116,
+    "prazo_prometido_medio": 28.4
+   },
+   {
+    "ano_mes": "2018-07",
+    "pedidos": 6156,
+    "atrasados": 208,
+    "taxa_atraso": 0.0338,
+    "prazo_prometido_medio": 20.3
+   },
+   {
+    "ano_mes": "2018-08",
+    "pedidos": 6351,
+    "atrasados": 393,
+    "taxa_atraso": 0.0619,
+    "prazo_prometido_medio": 15.8
+   }
+  ]
+ },
+ "p2": {
+  "origem": [
+   {
+    "origem_atraso": "transporte",
+    "pedidos": 4695,
+    "participacao": 0.7213
+   },
+   {
+    "origem_atraso": "vendedor",
+    "pedidos": 1814,
+    "participacao": 0.2787
+   }
+  ],
+  "etapas_medianas": [
+   {
+    "grupo": "atrasado",
+    "pedidos": 6510,
+    "aprovacao": 0.02,
+    "postagem": 3.07,
+    "transporte": 26.2,
+    "lead_time": 31.26,
+    "prometido": 23.0,
+    "taxa_postagem_tardia": 0.2787
+   },
+   {
+    "grupo": "no prazo",
+    "pedidos": 88587,
+    "aprovacao": 0.01,
+    "postagem": 1.79,
+    "transporte": 6.96,
+    "lead_time": 9.86,
+    "prometido": 24.0,
+    "taxa_postagem_tardia": 0.0777
+   }
+  ]
+ },
+ "p3": {
+  "rotas_elegiveis": 38,
+  "top10": [
+   {
+    "rota": "SP->MA",
+    "pedidos": 486,
+    "atrasados": 93,
+    "taxa_atraso": 0.1914,
+    "participacao_atrasos": 0.0143
+   },
+   {
+    "rota": "SP->PI",
+    "pedidos": 327,
+    "atrasados": 54,
+    "taxa_atraso": 0.1651,
+    "participacao_atrasos": 0.0083
+   },
+   {
+    "rota": "SP->RJ",
+    "pedidos": 8048,
+    "atrasados": 1147,
+    "taxa_atraso": 0.1425,
+    "participacao_atrasos": 0.1759
+   },
+   {
+    "rota": "SP->CE",
+    "pedidos": 961,
+    "atrasados": 133,
+    "taxa_atraso": 0.1384,
+    "participacao_atrasos": 0.0204
+   },
+   {
+    "rota": "SP->BA",
+    "pedidos": 2278,
+    "atrasados": 297,
+    "taxa_atraso": 0.1304,
+    "participacao_atrasos": 0.0455
+   },
+   {
+    "rota": "SP->MS",
+    "pedidos": 471,
+    "atrasados": 59,
+    "taxa_atraso": 0.1253,
+    "participacao_atrasos": 0.009
+   },
+   {
+    "rota": "SP->ES",
+    "pedidos": 1444,
+    "atrasados": 180,
+    "taxa_atraso": 0.1247,
+    "participacao_atrasos": 0.0276
+   },
+   {
+    "rota": "PR->RJ",
+    "pedidos": 951,
+    "atrasados": 117,
+    "taxa_atraso": 0.123,
+    "participacao_atrasos": 0.0179
+   },
+   {
+    "rota": "SP->PA",
+    "pedidos": 675,
+    "atrasados": 81,
+    "taxa_atraso": 0.12,
+    "participacao_atrasos": 0.0124
+   },
+   {
+    "rota": "SP->PB",
+    "pedidos": 333,
+    "atrasados": 35,
+    "taxa_atraso": 0.1051,
+    "participacao_atrasos": 0.0054
+   }
+  ],
+  "participacao_top10": 0.3367,
+  "distancia": [
+   {
+    "faixa_distancia": "1. até 100 km",
+    "pedidos": 17694,
+    "taxa_atraso": 0.045,
+    "transporte_mediano": 2.1,
+    "prometido_mediano": 15.0
+   },
+   {
+    "faixa_distancia": "2. 100 a 500 km",
+    "pedidos": 36462,
+    "taxa_atraso": 0.0618,
+    "transporte_mediano": 6.5,
+    "prometido_mediano": 23.0
+   },
+   {
+    "faixa_distancia": "3. 500 a 1.000 km",
+    "pedidos": 25389,
+    "taxa_atraso": 0.0721,
+    "transporte_mediano": 8.8,
+    "prometido_mediano": 26.0
+   },
+   {
+    "faixa_distancia": "4. 1.000 a 2.000 km",
+    "pedidos": 9608,
+    "taxa_atraso": 0.0961,
+    "transporte_mediano": 12.3,
+    "prometido_mediano": 30.0
+   },
+   {
+    "faixa_distancia": "5. 2.000 km ou mais",
+    "pedidos": 5571,
+    "taxa_atraso": 0.1208,
+    "transporte_mediano": 14.8,
+    "prometido_mediano": 34.0
+   }
+  ]
+ },
+ "p4": [
+  {
+   "uf": "AC",
+   "regiao": "Norte",
+   "pedidos": 80,
+   "prazo_prometido_mediano": 41.0,
+   "lead_time_mediano": 18.4,
+   "folga_mediana": 22.0,
+   "taxa_atraso": 0.0375
+  },
+  {
+   "uf": "AP",
+   "regiao": "Norte",
+   "pedidos": 67,
+   "prazo_prometido_mediano": 48.0,
+   "lead_time_mediano": 24.3,
+   "folga_mediana": 22.0,
+   "taxa_atraso": 0.0299
+  },
+  {
+   "uf": "RO",
+   "regiao": "Norte",
+   "pedidos": 243,
+   "prazo_prometido_mediano": 38.0,
+   "lead_time_mediano": 17.6,
+   "folga_mediana": 21.0,
+   "taxa_atraso": 0.0288
+  },
+  {
+   "uf": "RR",
+   "regiao": "Norte",
+   "pedidos": 41,
+   "prazo_prometido_mediano": 45.0,
+   "lead_time_mediano": 25.0,
+   "folga_mediana": 20.0,
+   "taxa_atraso": 0.122
+  },
+  {
+   "uf": "AM",
+   "regiao": "Norte",
+   "pedidos": 145,
+   "prazo_prometido_mediano": 46.0,
+   "lead_time_mediano": 25.9,
+   "folga_mediana": 19.0,
+   "taxa_atraso": 0.0276
+  },
+  {
+   "uf": "PA",
+   "regiao": "Norte",
+   "pedidos": 946,
+   "prazo_prometido_mediano": 37.0,
+   "lead_time_mediano": 21.1,
+   "folga_mediana": 16.0,
+   "taxa_atraso": 0.1121
+  },
+  {
+   "uf": "RS",
+   "regiao": "Sul",
+   "pedidos": 5344,
+   "prazo_prometido_mediano": 29.0,
+   "lead_time_mediano": 13.2,
+   "folga_mediana": 15.0,
+   "taxa_atraso": 0.0608
+  },
+  {
+   "uf": "RN",
+   "regiao": "Nordeste",
+   "pedidos": 474,
+   "prazo_prometido_mediano": 32.5,
+   "lead_time_mediano": 16.1,
+   "folga_mediana": 15.0,
+   "taxa_atraso": 0.0928
+  },
+  {
+   "uf": "MT",
+   "regiao": "Centro-Oeste",
+   "pedidos": 886,
+   "prazo_prometido_mediano": 32.0,
+   "lead_time_mediano": 16.1,
+   "folga_mediana": 15.0,
+   "taxa_atraso": 0.0598
+  },
+  {
+   "uf": "PB",
+   "regiao": "Nordeste",
+   "pedidos": 517,
+   "prazo_prometido_mediano": 33.0,
+   "lead_time_mediano": 18.2,
+   "folga_mediana": 14.0,
+   "taxa_atraso": 0.1044
+  },
+  {
+   "uf": "PE",
+   "regiao": "Nordeste",
+   "pedidos": 1593,
+   "prazo_prometido_mediano": 32.0,
+   "lead_time_mediano": 15.7,
+   "folga_mediana": 14.0,
+   "taxa_atraso": 0.096
+  },
+  {
+   "uf": "PI",
+   "regiao": "Nordeste",
+   "pedidos": 476,
+   "prazo_prometido_mediano": 30.0,
+   "lead_time_mediano": 16.3,
+   "folga_mediana": 14.0,
+   "taxa_atraso": 0.1387
+  },
+  {
+   "uf": "PR",
+   "regiao": "Sul",
+   "pedidos": 4923,
+   "prazo_prometido_mediano": 25.0,
+   "lead_time_mediano": 10.4,
+   "folga_mediana": 14.0,
+   "taxa_atraso": 0.0404
+  },
+  {
+   "uf": "MG",
+   "regiao": "Sudeste",
+   "pedidos": 11354,
+   "prazo_prometido_mediano": 24.0,
+   "lead_time_mediano": 10.3,
+   "folga_mediana": 14.0,
+   "taxa_atraso": 0.0457
+  },
+  {
+   "uf": "SE",
+   "regiao": "Nordeste",
+   "pedidos": 335,
+   "prazo_prometido_mediano": 30.0,
+   "lead_time_mediano": 18.0,
+   "folga_mediana": 13.0,
+   "taxa_atraso": 0.1522
+  },
+  {
+   "uf": "DF",
+   "regiao": "Centro-Oeste",
+   "pedidos": 2080,
+   "prazo_prometido_mediano": 25.0,
+   "lead_time_mediano": 11.4,
+   "folga_mediana": 13.0,
+   "taxa_atraso": 0.0567
+  },
+  {
+   "uf": "SC",
+   "regiao": "Sul",
+   "pedidos": 3546,
+   "prazo_prometido_mediano": 26.0,
+   "lead_time_mediano": 13.0,
+   "folga_mediana": 13.0,
+   "taxa_atraso": 0.0821
+  },
+  {
+   "uf": "RJ",
+   "regiao": "Sudeste",
+   "pedidos": 12350,
+   "prazo_prometido_mediano": 25.0,
+   "lead_time_mediano": 12.0,
+   "folga_mediana": 13.0,
+   "taxa_atraso": 0.1211
+  },
+  {
+   "uf": "GO",
+   "regiao": "Centro-Oeste",
+   "pedidos": 1957,
+   "prazo_prometido_mediano": 27.0,
+   "lead_time_mediano": 13.9,
+   "folga_mediana": 13.0,
+   "taxa_atraso": 0.0654
+  },
+  {
+   "uf": "TO",
+   "regiao": "Norte",
+   "pedidos": 274,
+   "prazo_prometido_mediano": 29.0,
+   "lead_time_mediano": 15.9,
+   "folga_mediana": 13.0,
+   "taxa_atraso": 0.0985
+  },
+  {
+   "uf": "CE",
+   "regiao": "Nordeste",
+   "pedidos": 1279,
+   "prazo_prometido_mediano": 32.0,
+   "lead_time_mediano": 18.2,
+   "folga_mediana": 13.0,
+   "taxa_atraso": 0.1376
+  },
+  {
+   "uf": "ES",
+   "regiao": "Sudeste",
+   "pedidos": 1995,
+   "prazo_prometido_mediano": 26.0,
+   "lead_time_mediano": 13.6,
+   "folga_mediana": 12.0,
+   "taxa_atraso": 0.1073
+  },
+  {
+   "uf": "BA",
+   "regiao": "Nordeste",
+   "pedidos": 3256,
+   "prazo_prometido_mediano": 30.0,
+   "lead_time_mediano": 16.9,
+   "folga_mediana": 12.0,
+   "taxa_atraso": 0.1216
+  },
+  {
+   "uf": "MS",
+   "regiao": "Centro-Oeste",
+   "pedidos": 701,
+   "prazo_prometido_mediano": 26.0,
+   "lead_time_mediano": 13.9,
+   "folga_mediana": 12.0,
+   "taxa_atraso": 0.097
+  },
+  {
+   "uf": "SP",
+   "regiao": "Sudeste",
+   "pedidos": 40494,
+   "prazo_prometido_mediano": 19.0,
+   "lead_time_mediano": 7.2,
+   "folga_mediana": 11.0,
+   "taxa_atraso": 0.0449
+  },
+  {
+   "uf": "MA",
+   "regiao": "Nordeste",
+   "pedidos": 717,
+   "prazo_prometido_mediano": 31.0,
+   "lead_time_mediano": 19.2,
+   "folga_mediana": 11.0,
+   "taxa_atraso": 0.1743
+  },
+  {
+   "uf": "AL",
+   "regiao": "Nordeste",
+   "pedidos": 397,
+   "prazo_prometido_mediano": 32.0,
+   "lead_time_mediano": 22.3,
+   "folga_mediana": 10.0,
+   "taxa_atraso": 0.2141
+  }
+ ],
+ "p5": [
+  {
+   "faixa_atraso": "no prazo ou antecipado",
+   "pedidos_com_avaliacao": 89443,
+   "nota_media": 4.29,
+   "taxa_avaliacao_ruim": 0.0927
+  },
+  {
+   "faixa_atraso": "1 a 3 dias",
+   "pedidos_com_avaliacao": 1852,
+   "nota_media": 3.29,
+   "taxa_avaliacao_ruim": 0.3213
+  },
+  {
+   "faixa_atraso": "4 a 7 dias",
+   "pedidos_com_avaliacao": 1748,
+   "nota_media": 2.1,
+   "taxa_avaliacao_ruim": 0.6768
+  },
+  {
+   "faixa_atraso": "8 a 14 dias",
+   "pedidos_com_avaliacao": 1446,
+   "nota_media": 1.67,
+   "taxa_avaliacao_ruim": 0.8015
+  },
+  {
+   "faixa_atraso": "15 dias ou mais",
+   "pedidos_com_avaliacao": 1335,
+   "nota_media": 1.72,
+   "taxa_avaliacao_ruim": 0.7835
+  }
+ ],
+ "p6": {
+  "vendedores_elegiveis": 615,
+  "postagens_tardias": 6963,
+  "vendedores_para_80pct": 162,
+  "fracao_vendedores_80pct": 0.2634,
+  "top10": [
+   {
+    "seller_id": "7c67e1448b00f6e969d365cea6b010ab",
+    "pedidos": 963,
+    "postagens_tardias": 288,
+    "taxa_postagem_tardia": 0.2991,
+    "taxa_atraso": 0.0924
+   },
+   {
+    "seller_id": "1025f0e2d44d7041d6cf58b6550e0bfa",
+    "pedidos": 879,
+    "postagens_tardias": 161,
+    "taxa_postagem_tardia": 0.1832,
+    "taxa_atraso": 0.0819
+   },
+   {
+    "seller_id": "4a3ca9315b744ce9f8e9374361493884",
+    "pedidos": 1673,
+    "postagens_tardias": 151,
+    "taxa_postagem_tardia": 0.0903,
+    "taxa_atraso": 0.1004
+   },
+   {
+    "seller_id": "1f50f920176fa81dab994f9023523100",
+    "pedidos": 1364,
+    "postagens_tardias": 149,
+    "taxa_postagem_tardia": 0.1092,
+    "taxa_atraso": 0.0909
+   },
+   {
+    "seller_id": "3d871de0142ce09b7081e2b9d1733cb1",
+    "pedidos": 1044,
+    "postagens_tardias": 137,
+    "taxa_postagem_tardia": 0.1312,
+    "taxa_atraso": 0.0556
+   },
+   {
+    "seller_id": "06a2c3af7b3aee5d69171b0e14f0ee87",
+    "pedidos": 388,
+    "postagens_tardias": 121,
+    "taxa_postagem_tardia": 0.3119,
+    "taxa_atraso": 0.1907
+   },
+   {
+    "seller_id": "88460e8ebdecbfecb5f9601833981930",
+    "pedidos": 227,
+    "postagens_tardias": 116,
+    "taxa_postagem_tardia": 0.511,
+    "taxa_atraso": 0.185
+   },
+   {
+    "seller_id": "53e4c6e0f4312d4d2107a8c9cddf45cd",
+    "pedidos": 444,
+    "postagens_tardias": 94,
+    "taxa_postagem_tardia": 0.2117,
+    "taxa_atraso": 0.0495
+   },
+   {
+    "seller_id": "8160255418d5aaa7dbdc9f4c64ebda44",
+    "pedidos": 355,
+    "postagens_tardias": 90,
+    "taxa_postagem_tardia": 0.2535,
+    "taxa_atraso": 0.1437
+   },
+   {
+    "seller_id": "ea8482cd71df3c1969d7b9473ff13abc",
+    "pedidos": 1116,
+    "postagens_tardias": 87,
+    "taxa_postagem_tardia": 0.078,
+    "taxa_atraso": 0.086
+   }
+  ]
+ }
+}

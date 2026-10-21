@@ -3,16 +3,16 @@
     "linhas_por_arquivo": {
       "olist_customers_dataset.csv": 99441,
       "olist_geolocation_dataset.csv": 1000163,
+      "olist_orders_dataset.csv": 99441,
       "olist_order_items_dataset.csv": 112650,
       "olist_order_payments_dataset.csv": 103886,
       "olist_order_reviews_dataset.csv": 99224,
-      "olist_orders_dataset.csv": 99441,
       "olist_products_dataset.csv": 32951,
       "olist_sellers_dataset.csv": 3095,
       "product_category_name_translation.csv": 71
     },
     "pedidos_entregues": 96470,
-    "pedidos_com_inconsistencia_temporal": 188,
+    "pedidos_com_inconsistencia_temporal": 1373,
     "pedidos_multivendedor": 1275,
     "avaliacoes_duplicadas_removidas": 551,
     "pontos_geo_fora_brasil": 42,
@@ -20,6 +20,7 @@
     "produtos_sem_categoria": 610
   },
   "p1_nivel_servico": {
+    "atrasados": 6534,
     "taxa_atraso_global": 0.0677,
     "serie_mensal": [
       {
@@ -125,149 +126,122 @@
     ]
   },
   "p2_origem_atraso": {
-    "origem_atraso": [
-      {
-        "origem": "vendedor",
-        "pedidos": 1814,
-        "participacao": 0.2777
+    "pedidos_atrasados_validos": 6510,
+    "participacao_vendedor": 0.2786,
+    "participacao_transporte": 0.7214,
+    "medianas_etapas_dias": {
+      "atrasados": {
+        "aprovacao": 0.0166,
+        "postagem": 3.0665,
+        "transporte": 26.1981
       },
-      {
-        "origem": "transporte",
-        "pedidos": 4718,
-        "participacao": 0.7223
+      "no_prazo": {
+        "aprovacao": 0.0139,
+        "postagem": 1.792,
+        "transporte": 6.9568
       }
-    ],
-    "lead_time_por_situacao": [
-      {
-        "situacao": "atrasados",
-        "pedidos": 6532,
-        "medianas_dias": {
-          "aprovacao": 0.0169,
-          "postagem": 3.0525,
-          "transporte": 26.1981
-        },
-        "observacoes_por_etapa": {
-          "aprovacao": 6532,
-          "postagem": 6531,
-          "transporte": 6531
-        }
-      },
-      {
-        "situacao": "no_prazo",
-        "pedidos": 89750,
-        "medianas_dias": {
-          "aprovacao": 0.0142,
-          "postagem": 1.7609,
-          "transporte": 6.9461
-        },
-        "observacoes_por_etapa": {
-          "aprovacao": 89736,
-          "postagem": 89736,
-          "transporte": 89750
-        }
-      }
-    ]
+    }
   },
   "p3_rotas": {
-    "top_10_rotas": [
+    "top_10": [
       {
         "rota": "SP->MA",
         "pedidos": 486,
         "atrasados": 93,
         "taxa_atraso": 0.1914,
-        "participacao_atrasados": 0.0143
+        "participacao_atrasos": 0.0143
       },
       {
         "rota": "SP->PI",
         "pedidos": 327,
         "atrasados": 54,
         "taxa_atraso": 0.1651,
-        "participacao_atrasados": 0.0083
+        "participacao_atrasos": 0.0083
       },
       {
         "rota": "SP->RJ",
         "pedidos": 8048,
         "atrasados": 1147,
         "taxa_atraso": 0.1425,
-        "participacao_atrasados": 0.1759
+        "participacao_atrasos": 0.1759
       },
       {
         "rota": "SP->CE",
         "pedidos": 961,
         "atrasados": 133,
         "taxa_atraso": 0.1384,
-        "participacao_atrasados": 0.0204
+        "participacao_atrasos": 0.0204
       },
       {
         "rota": "SP->BA",
         "pedidos": 2278,
         "atrasados": 297,
         "taxa_atraso": 0.1304,
-        "participacao_atrasados": 0.0455
+        "participacao_atrasos": 0.0455
       },
       {
         "rota": "SP->MS",
         "pedidos": 471,
         "atrasados": 59,
         "taxa_atraso": 0.1253,
-        "participacao_atrasados": 0.009
+        "participacao_atrasos": 0.009
       },
       {
         "rota": "SP->ES",
         "pedidos": 1444,
         "atrasados": 180,
         "taxa_atraso": 0.1247,
-        "participacao_atrasados": 0.0276
+        "participacao_atrasos": 0.0276
       },
       {
         "rota": "PR->RJ",
         "pedidos": 951,
         "atrasados": 117,
         "taxa_atraso": 0.123,
-        "participacao_atrasados": 0.0179
+        "participacao_atrasos": 0.0179
       },
       {
         "rota": "SP->PA",
         "pedidos": 675,
         "atrasados": 81,
         "taxa_atraso": 0.12,
-        "participacao_atrasados": 0.0124
+        "participacao_atrasos": 0.0124
       },
       {
         "rota": "SP->PB",
         "pedidos": 333,
         "atrasados": 35,
         "taxa_atraso": 0.1051,
-        "participacao_atrasados": 0.0054
+        "participacao_atrasos": 0.0054
       }
     ],
-    "por_faixa_distancia_km": [
+    "por_distancia": [
       {
-        "faixa_distancia_km": "[0,100)",
+        "faixa_km": "[0,100)",
         "pedidos": 17694,
         "atrasados": 797,
         "taxa_atraso": 0.045
       },
       {
-        "faixa_distancia_km": "[100,500)",
+        "faixa_km": "[100,500)",
         "pedidos": 36462,
         "atrasados": 2253,
         "taxa_atraso": 0.0618
       },
       {
-        "faixa_distancia_km": "[500,1000)",
+        "faixa_km": "[500,1000)",
         "pedidos": 25389,
         "atrasados": 1830,
         "taxa_atraso": 0.0721
       },
       {
-        "faixa_distancia_km": "[1000,2000)",
+        "faixa_km": "[1000,2000)",
         "pedidos": 9608,
         "atrasados": 923,
         "taxa_atraso": 0.0961
       },
       {
-        "faixa_distancia_km": "[2000,inf)",
+        "faixa_km": "[2000,inf)",
         "pedidos": 5571,
         "atrasados": 673,
         "taxa_atraso": 0.1208
@@ -474,9 +448,9 @@
   "p6_pareto_vendedores": {
     "vendedores_elegiveis": 615,
     "total_postagens_tardias": 6963,
-    "vendedores_para_80_pct": 162,
-    "participacao_vendedores_para_80_pct": 0.2634,
-    "top_10_vendedores": [
+    "vendedores_para_80_porcento": 162,
+    "participacao_vendedores_para_80_porcento": 0.2634,
+    "top_10": [
       {
         "seller_id": "7c67e1448b00f6e969d365cea6b010ab",
         "pedidos": 963,
