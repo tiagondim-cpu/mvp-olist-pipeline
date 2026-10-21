@@ -103,7 +103,7 @@ fato_pedido = (s("pedidos").join(av, "order_id", "left").join(cli, "customer_id"
             F.when(F.col("flag_atrasado") & F.col("flag_postagem_tardia"), "vendedor")
              .when(F.col("flag_atrasado") & ~F.col("flag_postagem_tardia"), "transporte").alias("origem_atraso"),
             "flag_inconsistencia_temporal",
-            F.round(haversine_km("lat_v", "lng_v", "lat_c", "lng_c"), 1).alias("distancia_km"),
+            haversine_km("lat_v", "lng_v", "lat_c", "lng_c").alias("distancia_km"),
             "nota_avaliacao",
             (F.col("nota_avaliacao") <= 2).alias("flag_avaliacao_ruim")))
 salvar(fato_pedido, "fato_pedido")
