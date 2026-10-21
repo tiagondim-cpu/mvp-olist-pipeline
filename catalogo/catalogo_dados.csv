@@ -1,0 +1,76 @@
+tabela;atributo;tipo;descricao;dominio_min;dominio_max;categorias;obrigatorio;significado_nulo;linhagem
+dim_data;data_key;numérico;Chave da data no formato AAAAMMDD;20160101;20201231;;sim;;Gerada por sequência de datas no notebook 03
+dim_data;data;data;Data-calendário;2016-01-01;2020-12-31;;sim;;Gerada por sequência de datas no notebook 03
+dim_data;ano;numérico;Ano civil;2016;2020;;sim;;Derivado de data
+dim_data;trimestre;numérico;Trimestre do ano;1;4;;sim;;Derivado de data
+dim_data;mes;numérico;Mês do ano;1;12;;sim;;Derivado de data
+dim_data;ano_mes;categórico;Ano e mês no formato AAAA-MM;;;;sim;;Derivado de data
+dim_data;dia_semana;numérico;Dia da semana (1 = domingo, 7 = sábado);1;7;;sim;;Derivado de data pela função dayofweek do Spark
+dim_data;flag_fim_de_semana;booleano;Verdadeiro para sábado e domingo;;;true|false;sim;;Derivado de dia_semana
+dim_cliente;customer_id;texto;Identificador do cliente no pedido, cada pedido gera um valor novo (RN03);;;;sim;;olist_customers_dataset.customer_id sem transformação
+dim_cliente;customer_unique_id;texto;Identificador da pessoa compradora, repete-se entre pedidos do mesmo comprador;;;;sim;;olist_customers_dataset.customer_unique_id sem transformação
+dim_cliente;cep_prefixo;numérico;Cinco primeiros dígitos do CEP do cliente;1000;99999;;sim;;olist_customers_dataset.customer_zip_code_prefix convertido para inteiro
+dim_cliente;cidade;texto;Município do cliente em minúsculas sem acento, como no arquivo de origem;;;;sim;;olist_customers_dataset.customer_city sem transformação
+dim_cliente;uf;categórico;Unidade da federação do cliente;;;AC|AL|AM|AP|BA|CE|DF|ES|GO|MA|MG|MS|MT|PA|PB|PE|PI|PR|RJ|RN|RO|RR|RS|SC|SE|SP|TO;sim;;olist_customers_dataset.customer_state em maiúsculas
+dim_cliente;regiao;categórico;Região geográfica do IBGE correspondente à UF;;;Norte|Nordeste|Centro-Oeste|Sudeste|Sul;sim;;Mapeamento fixo UF para região no notebook 03
+dim_cliente;latitude;numérico;Latitude mediana dos pontos válidos do prefixo de CEP (RN12 e RN13);-33.75;5.27;;não;Prefixo de CEP sem ponto válido no arquivo de geolocalização;olist_geolocation_dataset filtrado pelo retângulo do Brasil e agregado pela mediana por prefixo
+dim_cliente;longitude;numérico;Longitude mediana dos pontos válidos do prefixo de CEP (RN12 e RN13);-73.99;-34.79;;não;Prefixo de CEP sem ponto válido no arquivo de geolocalização;olist_geolocation_dataset filtrado pelo retângulo do Brasil e agregado pela mediana por prefixo
+dim_vendedor;seller_id;texto;Identificador do vendedor;;;;sim;;olist_sellers_dataset.seller_id sem transformação
+dim_vendedor;cep_prefixo;numérico;Cinco primeiros dígitos do CEP do vendedor;1000;99999;;sim;;olist_sellers_dataset.seller_zip_code_prefix convertido para inteiro
+dim_vendedor;cidade;texto;Município do vendedor como no arquivo de origem;;;;sim;;olist_sellers_dataset.seller_city sem transformação
+dim_vendedor;uf;categórico;Unidade da federação do vendedor;;;AC|AL|AM|AP|BA|CE|DF|ES|GO|MA|MG|MS|MT|PA|PB|PE|PI|PR|RJ|RN|RO|RR|RS|SC|SE|SP|TO;sim;;olist_sellers_dataset.seller_state em maiúsculas
+dim_vendedor;regiao;categórico;Região geográfica do IBGE correspondente à UF;;;Norte|Nordeste|Centro-Oeste|Sudeste|Sul;sim;;Mapeamento fixo UF para região no notebook 03
+dim_vendedor;latitude;numérico;Latitude mediana dos pontos válidos do prefixo de CEP (RN12 e RN13);-33.75;5.27;;não;Prefixo de CEP sem ponto válido no arquivo de geolocalização;olist_geolocation_dataset filtrado e agregado pela mediana por prefixo
+dim_vendedor;longitude;numérico;Longitude mediana dos pontos válidos do prefixo de CEP (RN12 e RN13);-73.99;-34.79;;não;Prefixo de CEP sem ponto válido no arquivo de geolocalização;olist_geolocation_dataset filtrado e agregado pela mediana por prefixo
+dim_produto;product_id;texto;Identificador do produto;;;;sim;;olist_products_dataset.product_id sem transformação
+dim_produto;categoria;categórico;Categoria do produto em português (73 valores mais sem_categoria);;;;sim;;olist_products_dataset.product_category_name, nulo substituído por sem_categoria (RN16)
+dim_produto;categoria_en;categórico;Categoria do produto em inglês;;;;sim;;product_category_name_translation, duas traduções manuais e sem_categoria para nulos (RN16)
+dim_produto;qtd_fotos;numérico;Quantidade de fotos no anúncio;1;20;;não;Anúncio sem metadados de cadastro;olist_products_dataset.product_photos_qty convertido para inteiro
+dim_produto;peso_g;numérico;Peso do produto em gramas;1;50000;;não;Produto sem medidas cadastradas;olist_products_dataset.product_weight_g convertido para inteiro
+dim_produto;comprimento_cm;numérico;Comprimento da embalagem em centímetros;1;200;;não;Produto sem medidas cadastradas;olist_products_dataset.product_length_cm convertido para inteiro
+dim_produto;altura_cm;numérico;Altura da embalagem em centímetros;1;200;;não;Produto sem medidas cadastradas;olist_products_dataset.product_height_cm convertido para inteiro
+dim_produto;largura_cm;numérico;Largura da embalagem em centímetros;1;200;;não;Produto sem medidas cadastradas;olist_products_dataset.product_width_cm convertido para inteiro
+dim_produto;volume_cm3;numérico;Volume da embalagem (comprimento x altura x largura);1;8000000;;não;Produto sem medidas cadastradas;Calculado no notebook 03
+fato_pedido;order_id;texto;Identificador do pedido, chave primária da fato;;;;sim;;olist_orders_dataset.order_id sem transformação
+fato_pedido;customer_id;texto;Chave estrangeira para dim_cliente;;;;sim;;olist_orders_dataset.customer_id
+fato_pedido;seller_id;texto;Chave estrangeira para dim_vendedor quando o pedido tem um único vendedor;;;;não;Pedido com mais de um vendedor (RN14);Único seller_id de olist_order_items_dataset por pedido
+fato_pedido;status;categórico;Situação do pedido na origem;;;delivered|shipped|canceled|unavailable|invoiced|processing|created|approved;sim;;olist_orders_dataset.order_status sem transformação
+fato_pedido;data_compra_key;numérico;Chave estrangeira para dim_data (data da compra);20160101;20201231;;sim;;Data de olist_orders_dataset.order_purchase_timestamp
+fato_pedido;data_entrega_key;numérico;Chave estrangeira para dim_data (data da entrega ao cliente);20160101;20201231;;não;Pedido não entregue;Data de olist_orders_dataset.order_delivered_customer_date
+fato_pedido;data_estimada_key;numérico;Chave estrangeira para dim_data (data de entrega prometida);20160101;20201231;;sim;;olist_orders_dataset.order_estimated_delivery_date
+fato_pedido;qtd_itens;numérico;Quantidade de itens do pedido;1;21;;não;Pedido sem itens no arquivo de itens;Contagem em olist_order_items_dataset
+fato_pedido;qtd_vendedores;numérico;Quantidade de vendedores distintos no pedido;1;5;;não;Pedido sem itens no arquivo de itens;Contagem distinta de seller_id em olist_order_items_dataset
+fato_pedido;valor_itens;numérico;Soma dos preços dos itens em reais (RN19);0.85;15000;;não;Pedido sem itens no arquivo de itens;Soma de olist_order_items_dataset.price
+fato_pedido;valor_frete;numérico;Soma dos fretes dos itens em reais (RN19);0;2000;;não;Pedido sem itens no arquivo de itens;Soma de olist_order_items_dataset.freight_value
+fato_pedido;dias_aprovacao;numérico;Dias entre compra e aprovação do pagamento (RN06);0;10;;não;Pagamento não aprovado;order_approved_at menos order_purchase_timestamp em horas dividido por 24
+fato_pedido;dias_postagem;numérico;Dias entre aprovação e entrega à transportadora (RN06);0;30;;não;Pedido não postado;order_delivered_carrier_date menos order_approved_at em horas dividido por 24
+fato_pedido;dias_transporte;numérico;Dias entre postagem e entrega ao cliente (RN06);0;60;;não;Pedido não entregue;order_delivered_customer_date menos order_delivered_carrier_date em horas dividido por 24
+fato_pedido;dias_lead_time;numérico;Dias entre compra e entrega ao cliente;0;90;;não;Pedido não entregue;order_delivered_customer_date menos order_purchase_timestamp em horas dividido por 24
+fato_pedido;dias_prometidos;numérico;Dias entre a data da compra e a data prometida;1;180;;sim;;Data estimada menos data da compra
+fato_pedido;dias_atraso;numérico;Dias de calendário entre entrega e data prometida, positivo indica atraso (RN04);-60;60;;não;Pedido não entregue;Data de entrega menos data estimada
+fato_pedido;folga_dias;numérico;Dias de antecedência em relação à promessa, negativo indica atraso (RN05);-60;60;;não;Pedido não entregue;Igual a menos dias_atraso
+fato_pedido;faixa_atraso;categórico;Faixa de dias de atraso;;;no prazo ou antecipado|1 a 3 dias|4 a 7 dias|8 a 14 dias|15 dias ou mais;não;Pedido não entregue;Derivada de dias_atraso
+fato_pedido;flag_entregue;booleano;Pedido no universo de análise de entrega (RN01);;;true|false;sim;;status = delivered e data de entrega preenchida
+fato_pedido;flag_atrasado;booleano;Entregue depois da data prometida (RN04);;;true|false;não;Pedido não entregue;dias_atraso maior que zero
+fato_pedido;flag_postagem_tardia;booleano;Postado depois do prazo-limite de envio do vendedor (RN08);;;true|false;não;Pedido não postado ou sem itens;order_delivered_carrier_date maior que o máximo de shipping_limit_date dos itens
+fato_pedido;origem_atraso;categórico;Etapa a que se atribui o atraso (RN09);;;vendedor|transporte;não;Pedido não atrasado;vendedor se flag_postagem_tardia, transporte caso contrário
+fato_pedido;flag_inconsistencia_temporal;booleano;Sequência de datas impossível (RN07);;;true|false;sim;;Alguma etapa do lead time com duração negativa
+fato_pedido;distancia_km;numérico;Distância em linha reta entre vendedor e cliente (RN14);0;4500;;não;Pedido com vários vendedores ou prefixo sem coordenada;Haversine entre as coordenadas de dim_vendedor e dim_cliente
+fato_pedido;nota_avaliacao;numérico;Nota dada pelo cliente (RN10);1;5;;não;Pedido sem avaliação;olist_order_reviews_dataset.review_score após deduplicação
+fato_pedido;flag_avaliacao_ruim;booleano;Nota 1 ou 2 (RN11);;;true|false;não;Pedido sem avaliação;Derivado de nota_avaliacao
+fato_item_pedido;order_id;texto;Identificador do pedido, parte da chave primária;;;;sim;;olist_order_items_dataset.order_id
+fato_item_pedido;order_item_id;numérico;Sequencial do item dentro do pedido, parte da chave primária;1;21;;sim;;olist_order_items_dataset.order_item_id
+fato_item_pedido;product_id;texto;Chave estrangeira para dim_produto;;;;sim;;olist_order_items_dataset.product_id
+fato_item_pedido;seller_id;texto;Chave estrangeira para dim_vendedor;;;;sim;;olist_order_items_dataset.seller_id
+fato_item_pedido;customer_id;texto;Chave estrangeira para dim_cliente;;;;sim;;olist_orders_dataset.customer_id pela junção com o pedido
+fato_item_pedido;data_compra_key;numérico;Chave estrangeira para dim_data (data da compra);20160101;20201231;;sim;;olist_orders_dataset.order_purchase_timestamp pela junção com o pedido
+fato_item_pedido;data_limite_envio_key;numérico;Chave estrangeira para dim_data (prazo-limite de envio do vendedor);20160101;20201231;;sim;;olist_order_items_dataset.shipping_limit_date
+fato_item_pedido;preco;numérico;Preço do item em reais;0.01;7000;;sim;;olist_order_items_dataset.price
+fato_item_pedido;frete;numérico;Frete do item em reais;0;500;;sim;;olist_order_items_dataset.freight_value
+fato_pagamento;order_id;texto;Identificador do pedido, parte da chave primária;;;;sim;;olist_order_payments_dataset.order_id
+fato_pagamento;sequencial;numérico;Ordem do pagamento dentro do pedido, parte da chave primária;1;29;;sim;;olist_order_payments_dataset.payment_sequential
+fato_pagamento;customer_id;texto;Chave estrangeira para dim_cliente;;;;sim;;olist_orders_dataset.customer_id pela junção com o pedido
+fato_pagamento;data_compra_key;numérico;Chave estrangeira para dim_data (data da compra);20160101;20201231;;sim;;olist_orders_dataset.order_purchase_timestamp pela junção com o pedido
+fato_pagamento;tipo_pagamento;categórico;Meio de pagamento;;;credit_card|boleto|voucher|debit_card|not_defined;sim;;olist_order_payments_dataset.payment_type
+fato_pagamento;parcelas;numérico;Número de parcelas;1;24;;sim;;olist_order_payments_dataset.payment_installments
+fato_pagamento;valor;numérico;Valor pago nesta linha em reais;0.01;15000;;sim;;olist_order_payments_dataset.payment_value

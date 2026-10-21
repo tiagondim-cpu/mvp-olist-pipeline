@@ -1,0 +1,542 @@
+{
+  "contagens": {
+    "linhas_por_arquivo": {
+      "olist_customers_dataset.csv": 99441,
+      "olist_geolocation_dataset.csv": 1000163,
+      "olist_order_items_dataset.csv": 112650,
+      "olist_order_payments_dataset.csv": 103886,
+      "olist_order_reviews_dataset.csv": 99224,
+      "olist_orders_dataset.csv": 99441,
+      "olist_products_dataset.csv": 32951,
+      "olist_sellers_dataset.csv": 3095,
+      "product_category_name_translation.csv": 71
+    },
+    "pedidos_entregues": 96470,
+    "pedidos_com_inconsistencia_temporal": 188,
+    "pedidos_multivendedor": 1275,
+    "avaliacoes_duplicadas_removidas": 551,
+    "pontos_geo_fora_brasil": 42,
+    "prefixos_com_coordenada": 19010,
+    "produtos_sem_categoria": 610
+  },
+  "p1_nivel_servico": {
+    "taxa_atraso_global": 0.0677,
+    "serie_mensal": [
+      {
+        "mes": "2017-01",
+        "pedidos": 750,
+        "taxa_atraso": 0.0293
+      },
+      {
+        "mes": "2017-02",
+        "pedidos": 1653,
+        "taxa_atraso": 0.0296
+      },
+      {
+        "mes": "2017-03",
+        "pedidos": 2546,
+        "taxa_atraso": 0.0456
+      },
+      {
+        "mes": "2017-04",
+        "pedidos": 2303,
+        "taxa_atraso": 0.0656
+      },
+      {
+        "mes": "2017-05",
+        "pedidos": 3545,
+        "taxa_atraso": 0.0299
+      },
+      {
+        "mes": "2017-06",
+        "pedidos": 3135,
+        "taxa_atraso": 0.0303
+      },
+      {
+        "mes": "2017-07",
+        "pedidos": 3872,
+        "taxa_atraso": 0.0279
+      },
+      {
+        "mes": "2017-08",
+        "pedidos": 4193,
+        "taxa_atraso": 0.0291
+      },
+      {
+        "mes": "2017-09",
+        "pedidos": 4150,
+        "taxa_atraso": 0.0439
+      },
+      {
+        "mes": "2017-10",
+        "pedidos": 4478,
+        "taxa_atraso": 0.0418
+      },
+      {
+        "mes": "2017-11",
+        "pedidos": 7288,
+        "taxa_atraso": 0.124
+      },
+      {
+        "mes": "2017-12",
+        "pedidos": 5513,
+        "taxa_atraso": 0.0746
+      },
+      {
+        "mes": "2018-01",
+        "pedidos": 7069,
+        "taxa_atraso": 0.057
+      },
+      {
+        "mes": "2018-02",
+        "pedidos": 6555,
+        "taxa_atraso": 0.1413
+      },
+      {
+        "mes": "2018-03",
+        "pedidos": 7003,
+        "taxa_atraso": 0.1896
+      },
+      {
+        "mes": "2018-04",
+        "pedidos": 6798,
+        "taxa_atraso": 0.045
+      },
+      {
+        "mes": "2018-05",
+        "pedidos": 6749,
+        "taxa_atraso": 0.0656
+      },
+      {
+        "mes": "2018-06",
+        "pedidos": 6096,
+        "taxa_atraso": 0.0116
+      },
+      {
+        "mes": "2018-07",
+        "pedidos": 6156,
+        "taxa_atraso": 0.0338
+      },
+      {
+        "mes": "2018-08",
+        "pedidos": 6351,
+        "taxa_atraso": 0.0619
+      }
+    ]
+  },
+  "p2_origem_atraso": {
+    "origem_atraso": [
+      {
+        "origem": "vendedor",
+        "pedidos": 1814,
+        "participacao": 0.2777
+      },
+      {
+        "origem": "transporte",
+        "pedidos": 4718,
+        "participacao": 0.7223
+      }
+    ],
+    "lead_time_por_situacao": [
+      {
+        "situacao": "atrasados",
+        "pedidos": 6532,
+        "medianas_dias": {
+          "aprovacao": 0.0169,
+          "postagem": 3.0525,
+          "transporte": 26.1981
+        },
+        "observacoes_por_etapa": {
+          "aprovacao": 6532,
+          "postagem": 6531,
+          "transporte": 6531
+        }
+      },
+      {
+        "situacao": "no_prazo",
+        "pedidos": 89750,
+        "medianas_dias": {
+          "aprovacao": 0.0142,
+          "postagem": 1.7609,
+          "transporte": 6.9461
+        },
+        "observacoes_por_etapa": {
+          "aprovacao": 89736,
+          "postagem": 89736,
+          "transporte": 89750
+        }
+      }
+    ]
+  },
+  "p3_rotas": {
+    "top_10_rotas": [
+      {
+        "rota": "SP->MA",
+        "pedidos": 486,
+        "atrasados": 93,
+        "taxa_atraso": 0.1914,
+        "participacao_atrasados": 0.0143
+      },
+      {
+        "rota": "SP->PI",
+        "pedidos": 327,
+        "atrasados": 54,
+        "taxa_atraso": 0.1651,
+        "participacao_atrasados": 0.0083
+      },
+      {
+        "rota": "SP->RJ",
+        "pedidos": 8048,
+        "atrasados": 1147,
+        "taxa_atraso": 0.1425,
+        "participacao_atrasados": 0.1759
+      },
+      {
+        "rota": "SP->CE",
+        "pedidos": 961,
+        "atrasados": 133,
+        "taxa_atraso": 0.1384,
+        "participacao_atrasados": 0.0204
+      },
+      {
+        "rota": "SP->BA",
+        "pedidos": 2278,
+        "atrasados": 297,
+        "taxa_atraso": 0.1304,
+        "participacao_atrasados": 0.0455
+      },
+      {
+        "rota": "SP->MS",
+        "pedidos": 471,
+        "atrasados": 59,
+        "taxa_atraso": 0.1253,
+        "participacao_atrasados": 0.009
+      },
+      {
+        "rota": "SP->ES",
+        "pedidos": 1444,
+        "atrasados": 180,
+        "taxa_atraso": 0.1247,
+        "participacao_atrasados": 0.0276
+      },
+      {
+        "rota": "PR->RJ",
+        "pedidos": 951,
+        "atrasados": 117,
+        "taxa_atraso": 0.123,
+        "participacao_atrasados": 0.0179
+      },
+      {
+        "rota": "SP->PA",
+        "pedidos": 675,
+        "atrasados": 81,
+        "taxa_atraso": 0.12,
+        "participacao_atrasados": 0.0124
+      },
+      {
+        "rota": "SP->PB",
+        "pedidos": 333,
+        "atrasados": 35,
+        "taxa_atraso": 0.1051,
+        "participacao_atrasados": 0.0054
+      }
+    ],
+    "por_faixa_distancia_km": [
+      {
+        "faixa_distancia_km": "[0,100)",
+        "pedidos": 17694,
+        "atrasados": 797,
+        "taxa_atraso": 0.045
+      },
+      {
+        "faixa_distancia_km": "[100,500)",
+        "pedidos": 36462,
+        "atrasados": 2253,
+        "taxa_atraso": 0.0618
+      },
+      {
+        "faixa_distancia_km": "[500,1000)",
+        "pedidos": 25389,
+        "atrasados": 1830,
+        "taxa_atraso": 0.0721
+      },
+      {
+        "faixa_distancia_km": "[1000,2000)",
+        "pedidos": 9608,
+        "atrasados": 923,
+        "taxa_atraso": 0.0961
+      },
+      {
+        "faixa_distancia_km": "[2000,inf)",
+        "pedidos": 5571,
+        "atrasados": 673,
+        "taxa_atraso": 0.1208
+      }
+    ],
+    "pedidos_sem_distancia": 471
+  },
+  "p4_calibracao": [
+    {
+      "uf": "AC",
+      "pedidos": 80,
+      "mediana_folga_dias": 22.0,
+      "taxa_atraso": 0.0375
+    },
+    {
+      "uf": "AP",
+      "pedidos": 67,
+      "mediana_folga_dias": 22.0,
+      "taxa_atraso": 0.0299
+    },
+    {
+      "uf": "RO",
+      "pedidos": 243,
+      "mediana_folga_dias": 21.0,
+      "taxa_atraso": 0.0288
+    },
+    {
+      "uf": "RR",
+      "pedidos": 41,
+      "mediana_folga_dias": 20.0,
+      "taxa_atraso": 0.122
+    },
+    {
+      "uf": "AM",
+      "pedidos": 145,
+      "mediana_folga_dias": 19.0,
+      "taxa_atraso": 0.0276
+    },
+    {
+      "uf": "PA",
+      "pedidos": 946,
+      "mediana_folga_dias": 16.0,
+      "taxa_atraso": 0.1121
+    },
+    {
+      "uf": "MT",
+      "pedidos": 886,
+      "mediana_folga_dias": 15.0,
+      "taxa_atraso": 0.0598
+    },
+    {
+      "uf": "RN",
+      "pedidos": 474,
+      "mediana_folga_dias": 15.0,
+      "taxa_atraso": 0.0928
+    },
+    {
+      "uf": "RS",
+      "pedidos": 5344,
+      "mediana_folga_dias": 15.0,
+      "taxa_atraso": 0.0608
+    },
+    {
+      "uf": "MG",
+      "pedidos": 11354,
+      "mediana_folga_dias": 14.0,
+      "taxa_atraso": 0.0457
+    },
+    {
+      "uf": "PB",
+      "pedidos": 517,
+      "mediana_folga_dias": 14.0,
+      "taxa_atraso": 0.1044
+    },
+    {
+      "uf": "PE",
+      "pedidos": 1593,
+      "mediana_folga_dias": 14.0,
+      "taxa_atraso": 0.096
+    },
+    {
+      "uf": "PI",
+      "pedidos": 476,
+      "mediana_folga_dias": 14.0,
+      "taxa_atraso": 0.1387
+    },
+    {
+      "uf": "PR",
+      "pedidos": 4923,
+      "mediana_folga_dias": 14.0,
+      "taxa_atraso": 0.0404
+    },
+    {
+      "uf": "CE",
+      "pedidos": 1279,
+      "mediana_folga_dias": 13.0,
+      "taxa_atraso": 0.1376
+    },
+    {
+      "uf": "DF",
+      "pedidos": 2080,
+      "mediana_folga_dias": 13.0,
+      "taxa_atraso": 0.0567
+    },
+    {
+      "uf": "GO",
+      "pedidos": 1957,
+      "mediana_folga_dias": 13.0,
+      "taxa_atraso": 0.0654
+    },
+    {
+      "uf": "RJ",
+      "pedidos": 12350,
+      "mediana_folga_dias": 13.0,
+      "taxa_atraso": 0.1211
+    },
+    {
+      "uf": "SC",
+      "pedidos": 3546,
+      "mediana_folga_dias": 13.0,
+      "taxa_atraso": 0.0821
+    },
+    {
+      "uf": "SE",
+      "pedidos": 335,
+      "mediana_folga_dias": 13.0,
+      "taxa_atraso": 0.1522
+    },
+    {
+      "uf": "TO",
+      "pedidos": 274,
+      "mediana_folga_dias": 13.0,
+      "taxa_atraso": 0.0985
+    },
+    {
+      "uf": "BA",
+      "pedidos": 3256,
+      "mediana_folga_dias": 12.0,
+      "taxa_atraso": 0.1216
+    },
+    {
+      "uf": "ES",
+      "pedidos": 1995,
+      "mediana_folga_dias": 12.0,
+      "taxa_atraso": 0.1073
+    },
+    {
+      "uf": "MS",
+      "pedidos": 701,
+      "mediana_folga_dias": 12.0,
+      "taxa_atraso": 0.097
+    },
+    {
+      "uf": "MA",
+      "pedidos": 717,
+      "mediana_folga_dias": 11.0,
+      "taxa_atraso": 0.1743
+    },
+    {
+      "uf": "SP",
+      "pedidos": 40494,
+      "mediana_folga_dias": 11.0,
+      "taxa_atraso": 0.0449
+    },
+    {
+      "uf": "AL",
+      "pedidos": 397,
+      "mediana_folga_dias": 10.0,
+      "taxa_atraso": 0.2141
+    }
+  ],
+  "p5_avaliacao": [
+    {
+      "faixa_atraso": "no prazo ou antecipado (<=0)",
+      "pedidos_com_avaliacao": 89443,
+      "nota_media": 4.2904,
+      "taxa_avaliacao_ruim": 0.0927
+    },
+    {
+      "faixa_atraso": "1-3",
+      "pedidos_com_avaliacao": 1852,
+      "nota_media": 3.291,
+      "taxa_avaliacao_ruim": 0.3213
+    },
+    {
+      "faixa_atraso": "4-7",
+      "pedidos_com_avaliacao": 1748,
+      "nota_media": 2.103,
+      "taxa_avaliacao_ruim": 0.6768
+    },
+    {
+      "faixa_atraso": "8-14",
+      "pedidos_com_avaliacao": 1446,
+      "nota_media": 1.6708,
+      "taxa_avaliacao_ruim": 0.8015
+    },
+    {
+      "faixa_atraso": "15+ dias",
+      "pedidos_com_avaliacao": 1335,
+      "nota_media": 1.7236,
+      "taxa_avaliacao_ruim": 0.7835
+    }
+  ],
+  "p6_pareto_vendedores": {
+    "vendedores_elegiveis": 615,
+    "total_postagens_tardias": 6963,
+    "vendedores_para_80_pct": 162,
+    "participacao_vendedores_para_80_pct": 0.2634,
+    "top_10_vendedores": [
+      {
+        "seller_id": "7c67e1448b00f6e969d365cea6b010ab",
+        "pedidos": 963,
+        "postagens_tardias": 288,
+        "taxa_postagem_tardia": 0.2991
+      },
+      {
+        "seller_id": "1025f0e2d44d7041d6cf58b6550e0bfa",
+        "pedidos": 879,
+        "postagens_tardias": 161,
+        "taxa_postagem_tardia": 0.1832
+      },
+      {
+        "seller_id": "4a3ca9315b744ce9f8e9374361493884",
+        "pedidos": 1673,
+        "postagens_tardias": 151,
+        "taxa_postagem_tardia": 0.0903
+      },
+      {
+        "seller_id": "1f50f920176fa81dab994f9023523100",
+        "pedidos": 1364,
+        "postagens_tardias": 149,
+        "taxa_postagem_tardia": 0.1092
+      },
+      {
+        "seller_id": "3d871de0142ce09b7081e2b9d1733cb1",
+        "pedidos": 1044,
+        "postagens_tardias": 137,
+        "taxa_postagem_tardia": 0.1312
+      },
+      {
+        "seller_id": "06a2c3af7b3aee5d69171b0e14f0ee87",
+        "pedidos": 388,
+        "postagens_tardias": 121,
+        "taxa_postagem_tardia": 0.3119
+      },
+      {
+        "seller_id": "88460e8ebdecbfecb5f9601833981930",
+        "pedidos": 227,
+        "postagens_tardias": 116,
+        "taxa_postagem_tardia": 0.511
+      },
+      {
+        "seller_id": "53e4c6e0f4312d4d2107a8c9cddf45cd",
+        "pedidos": 444,
+        "postagens_tardias": 94,
+        "taxa_postagem_tardia": 0.2117
+      },
+      {
+        "seller_id": "8160255418d5aaa7dbdc9f4c64ebda44",
+        "pedidos": 355,
+        "postagens_tardias": 90,
+        "taxa_postagem_tardia": 0.2535
+      },
+      {
+        "seller_id": "ea8482cd71df3c1969d7b9473ff13abc",
+        "pedidos": 1116,
+        "postagens_tardias": 87,
+        "taxa_postagem_tardia": 0.078
+      }
+    ]
+  }
+}
