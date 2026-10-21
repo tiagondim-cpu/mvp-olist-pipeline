@@ -25,7 +25,7 @@ Cada regra abaixo altera a interpretação dos resultados. O código que a imple
 
 | Código | Regra | Motivo |
 |---|---|---|
-| RN10 | Uma avaliação por pedido: quando há mais de uma, conserva-se a de `review_answer_timestamp` mais recente; empate é resolvido pelo maior `review_id`. | 551 pedidos têm mais de uma avaliação. A junção com a fato de pedido precisa ser um-para-um. (02_silver) |
+| RN10 | Uma avaliação por pedido: quando há mais de uma, conserva-se a de `review_answer_timestamp` mais recente; empate é resolvido pelo maior `review_id`. | 547 pedidos têm mais de uma avaliação, somando 551 linhas excedentes. A junção com a fato de pedido precisa ser um-para-um. (02_silver) |
 | RN11 | Avaliação ruim: nota 1 ou 2. | Corte usual de insatisfação em escala de cinco pontos. (03_gold) |
 
 ## Geografia e distância

@@ -2,7 +2,7 @@
 # MAGIC %md
 # MAGIC # 05 · Respostas às perguntas de negócio
 # MAGIC
-# MAGIC Todas as respostas são consultas SQL sobre a gold. Cada seção traz a consulta, a tabela de resultado e, quando ajuda a leitura, um gráfico. A interpretação dos números está no README, na seção de resultados.
+# MAGIC Todas as respostas são consultas SQL sobre a gold. Cada pergunta tem uma célula de consulta e tabela e outra de gráfico. Os gráficos também são gravados no volume `olist_gold.graficos` e reproduzidos no README. A interpretação dos números está no README, seção 6.
 # MAGIC
 # MAGIC Universo padrão: pedidos entregues (RN01). Nas análises de etapas do lead time saem os pedidos com inconsistência temporal (RN07); nas de rota e vendedor, só entram pedidos de vendedor único (RN14, RN15, RN17).
 
@@ -14,12 +14,19 @@ import matplotlib.pyplot as plt
 dbutils.widgets.text("catalogo", "workspace", "Catálogo do Unity Catalog")
 CATALOGO = dbutils.widgets.get("catalogo")
 spark.sql(f"USE {CATALOGO}.olist_gold")
+spark.sql(f"CREATE VOLUME IF NOT EXISTS {CATALOGO}.olist_gold.graficos")
+GRAFICOS = f"/Volumes/{CATALOGO}/olist_gold/graficos"
 q = lambda sql: spark.sql(sql).toPandas()
 resumo = {}
 
-plt.rcParams.update({"figure.dpi": 120, "axes.spines.top": False, "axes.spines.right": False,
-                     "axes.titlesize": 11, "axes.titleweight": "bold", "font.size": 9})
+plt.rcParams.update({"figure.dpi": 110, "axes.spines.top": False, "axes.spines.right": False,
+                     "axes.titlesize": 10.5, "axes.titleweight": "bold", "font.size": 9})
 AZUL, CINZA, LARANJA = "#1f5f99", "#9aa5b1", "#d9822b"
+
+def fechar(nome):
+    plt.tight_layout()
+    plt.savefig(f"{GRAFICOS}/{nome}.png", dpi=150, bbox_inches="tight")
+    plt.show()
 
 # COMMAND ----------
 
@@ -38,15 +45,23 @@ mensal = q("""SELECT d.ano_mes, count(*) AS pedidos, sum(int(f.flag_atrasado)) A
               FROM fato_pedido f JOIN dim_data d ON d.data_key = f.data_compra_key
               WHERE f.flag_entregue AND d.ano_mes BETWEEN '2017-01' AND '2018-08'
               GROUP BY d.ano_mes ORDER BY d.ano_mes""")
-display(global_); display(mensal)
 resumo["p1"] = {"global": global_.iloc[0].to_dict(), "serie": mensal.to_dict("records")}
+print(f"Taxa global de atraso: {global_.taxa_atraso[0]:.2%} ({int(global_.atrasados[0])} de {int(global_.pedidos_entregues[0])} pedidos entregues)")
+display(mensal)
+
+# COMMAND ----------
 
 fig, ax = plt.subplots(figsize=(9, 3.4))
 ax.bar(mensal.ano_mes, mensal.taxa_atraso * 100, color=[LARANJA if t > 0.10 else AZUL for t in mensal.taxa_atraso])
-ax.axhline(global_.taxa_atraso[0] * 100, color=CINZA, ls="--", lw=1)
-ax.text(len(mensal) - 0.5, global_.taxa_atraso[0] * 100 + 0.4, f"média {global_.taxa_atraso[0]:.1%}", ha="right", color="#555")
-ax.set_ylabel("% entregue depois do prometido"); ax.set_title("P1 · Taxa de atraso por mês da compra (laranja: acima de 10%)")
-ax.tick_params(axis="x", rotation=60); plt.tight_layout(); plt.show()
+media = global_.taxa_atraso[0] * 100
+ax.axhline(media, color=CINZA, ls="--", lw=1)
+ax.text(0, media + 0.5, f"média do período: {media:.1f}%", color="#555", fontsize=8)
+for x, t in zip(mensal.ano_mes, mensal.taxa_atraso):
+    if t > 0.10: ax.text(x, t * 100 + 0.3, f"{t:.0%}", ha="center", fontsize=8, color=LARANJA, fontweight="bold")
+ax.set_ylabel("% entregue depois do prometido")
+ax.set_title("P1 · O atraso não é crônico: concentra-se em três meses (nov/2017, fev/2018 e mar/2018)")
+ax.tick_params(axis="x", rotation=60)
+fechar("p1_taxa_atraso_mensal")
 
 # COMMAND ----------
 
@@ -68,8 +83,14 @@ etapas = q("""SELECT CASE WHEN flag_atrasado THEN 'atrasado' ELSE 'no prazo' END
                      round(avg(int(flag_postagem_tardia)), 4) AS taxa_postagem_tardia
               FROM fato_pedido WHERE flag_entregue AND NOT flag_inconsistencia_temporal
               GROUP BY 1 ORDER BY 1""")
-display(origem); display(etapas)
 resumo["p2"] = {"origem": origem.to_dict("records"), "etapas_medianas": etapas.to_dict("records")}
+display(origem)
+
+# COMMAND ----------
+
+display(etapas)
+
+# COMMAND ----------
 
 fig, ax = plt.subplots(figsize=(8, 2.6))
 for i, g in enumerate(etapas.itertuples()):
@@ -79,8 +100,10 @@ for i, g in enumerate(etapas.itertuples()):
         ax.barh(g.grupo, v, left=esquerda, color=cor, label=etapa if i == 0 else None)
         if v > 1: ax.text(esquerda + v / 2, i, f"{v:.1f}", va="center", ha="center", color="white", fontweight="bold")
         esquerda += v
+    ax.text(esquerda + 0.4, i, f"prometido: {g.prometido:.0f} dias", va="center", fontsize=8, color="#555")
 ax.set_xlabel("dias (mediana de cada etapa)"); ax.legend(frameon=False, ncol=3, loc="lower right")
-ax.set_title("P2 · Etapas do lead time: o transporte é a etapa que mais se alonga"); plt.tight_layout(); plt.show()
+ax.set_title("P2 · O atraso nasce no transporte: 26 dias nos atrasados contra 7 nos pedidos no prazo")
+fechar("p2_etapas_lead_time")
 
 # COMMAND ----------
 
@@ -98,6 +121,14 @@ rotas = q("""WITH base AS (
                     round(avg(int(flag_atrasado)), 4) AS taxa_atraso,
                     round(sum(int(flag_atrasado)) / (SELECT sum(int(flag_atrasado)) FROM base), 4) AS participacao_atrasos
              FROM base GROUP BY rota HAVING count(*) >= 300 ORDER BY taxa_atraso DESC""")
+top10 = rotas.head(10)
+resumo["p3"] = {"rotas_elegiveis": len(rotas), "top10": top10.to_dict("records"),
+                "participacao_top10": round(float(top10.participacao_atrasos.sum()), 4)}
+print(f"{len(rotas)} rotas com pelo menos 300 pedidos; as dez piores concentram {top10.participacao_atrasos.sum():.1%} dos atrasos")
+display(top10)
+
+# COMMAND ----------
+
 distancia = q("""SELECT CASE WHEN distancia_km < 100 THEN '1. até 100 km' WHEN distancia_km < 500 THEN '2. 100 a 500 km'
                              WHEN distancia_km < 1000 THEN '3. 500 a 1.000 km' WHEN distancia_km < 2000 THEN '4. 1.000 a 2.000 km'
                              ELSE '5. 2.000 km ou mais' END AS faixa_distancia,
@@ -105,19 +136,19 @@ distancia = q("""SELECT CASE WHEN distancia_km < 100 THEN '1. até 100 km' WHEN 
                         round(median(dias_transporte), 1) AS transporte_mediano, round(median(dias_prometidos), 1) AS prometido_mediano
                  FROM fato_pedido WHERE flag_entregue AND distancia_km IS NOT NULL
                  GROUP BY 1 ORDER BY 1""")
-display(rotas.head(10)); display(distancia)
-top10 = rotas.head(10)
-resumo["p3"] = {"rotas_elegiveis": len(rotas), "top10": top10.to_dict("records"),
-                "participacao_top10": round(float(top10.participacao_atrasos.sum()), 4),
-                "distancia": distancia.to_dict("records")}
+resumo["p3"]["distancia"] = distancia.to_dict("records")
+display(distancia)
+
+# COMMAND ----------
 
 fig, ax = plt.subplots(figsize=(8, 3.6))
-ax.barh(top10.rota[::-1], top10.taxa_atraso[::-1] * 100, color=AZUL)
-for y, (t, n) in enumerate(zip(top10.taxa_atraso[::-1], top10.pedidos[::-1])):
-    ax.text(t * 100 + 0.3, y, f"{t:.1%} de {n:,} pedidos".replace(",", "."), va="center", fontsize=8)
+ax.barh(top10.rota[::-1], top10.taxa_atraso[::-1] * 100, color=[LARANJA if r == "SP->RJ" else AZUL for r in top10.rota[::-1]])
+for y, (t, n, p) in enumerate(zip(top10.taxa_atraso[::-1], top10.pedidos[::-1], top10.participacao_atrasos[::-1])):
+    ax.text(t * 100 + 0.3, y, f"{t:.1%} · {n:,} pedidos · {p:.1%} dos atrasos".replace(",", "."), va="center", fontsize=7.5)
 ax.axvline(global_.taxa_atraso[0] * 100, color=CINZA, ls="--", lw=1)
-ax.set_xlabel("% entregue depois do prometido"); ax.set_title("P3 · Dez rotas com maior taxa de atraso (mínimo de 300 pedidos)")
-plt.tight_layout(); plt.show()
+ax.set_xlim(0, 30); ax.set_xlabel("% entregue depois do prometido (tracejado: média geral)")
+ax.set_title("P3 · Dez rotas com maior atraso; SP->RJ sozinha responde por 17,6% de todos os atrasos")
+fechar("p3_rotas_criticas")
 
 # COMMAND ----------
 
@@ -134,15 +165,18 @@ calibracao = q("""SELECT c.uf, c.regiao, count(*) AS pedidos,
                          round(avg(int(f.flag_atrasado)), 4) AS taxa_atraso
                   FROM fato_pedido f JOIN dim_cliente c USING (customer_id)
                   WHERE f.flag_entregue GROUP BY c.uf, c.regiao ORDER BY folga_mediana DESC""")
-display(calibracao)
 resumo["p4"] = calibracao.to_dict("records")
+display(calibracao)
+
+# COMMAND ----------
 
 fig, ax = plt.subplots(figsize=(7, 4.4))
 ax.scatter(calibracao.folga_mediana, calibracao.taxa_atraso * 100, s=calibracao.pedidos / 60 + 15, color=AZUL, alpha=.7)
 for r in calibracao.itertuples():
     ax.annotate(r.uf, (r.folga_mediana, r.taxa_atraso * 100), fontsize=8, xytext=(3, 3), textcoords="offset points")
 ax.set_xlabel("folga mediana (dias entregues antes do prometido)"); ax.set_ylabel("% entregue depois do prometido")
-ax.set_title("P4 · Folga alta e atraso alto convivem: a promessa não está calibrada"); plt.tight_layout(); plt.show()
+ax.set_title("P4 · A promessa folga de 10 a 22 dias na mediana e, ainda assim, falha até 21% no Nordeste")
+fechar("p4_calibracao_promessa")
 
 # COMMAND ----------
 
@@ -158,15 +192,18 @@ avaliacao = q("""SELECT faixa_atraso, count(*) AS pedidos_com_avaliacao, round(a
                  GROUP BY faixa_atraso
                  ORDER BY CASE faixa_atraso WHEN 'no prazo ou antecipado' THEN 0 WHEN '1 a 3 dias' THEN 1
                           WHEN '4 a 7 dias' THEN 2 WHEN '8 a 14 dias' THEN 3 ELSE 4 END""")
-display(avaliacao)
 resumo["p5"] = avaliacao.to_dict("records")
+display(avaliacao)
+
+# COMMAND ----------
 
 fig, ax = plt.subplots(figsize=(7, 3))
 barras = ax.bar(avaliacao.faixa_atraso, avaliacao.taxa_avaliacao_ruim * 100,
                 color=[AZUL] + [LARANJA] * (len(avaliacao) - 1))
 ax.bar_label(barras, labels=[f"{t:.0%}\nnota {n:.1f}" for t, n in zip(avaliacao.taxa_avaliacao_ruim, avaliacao.nota_media)], fontsize=8)
 ax.set_ylabel("% de avaliações 1 ou 2"); ax.set_ylim(0, 100)
-ax.set_title("P5 · Avaliação ruim por faixa de atraso"); plt.tight_layout(); plt.show()
+ax.set_title("P5 · Quatro dias de atraso bastam para que dois em cada três clientes avaliem mal")
+fechar("p5_avaliacao_por_atraso")
 
 # COMMAND ----------
 
@@ -184,25 +221,32 @@ vendedores = q("""SELECT seller_id, count(*) AS pedidos, sum(int(flag_postagem_t
                   ORDER BY postagens_tardias DESC, pedidos DESC""")
 vendedores["acumulado"] = vendedores.postagens_tardias.cumsum() / vendedores.postagens_tardias.sum()
 n80 = int((vendedores.acumulado < 0.8).sum()) + 1
-display(vendedores.head(10))
 resumo["p6"] = {"vendedores_elegiveis": len(vendedores), "postagens_tardias": int(vendedores.postagens_tardias.sum()),
                 "vendedores_para_80pct": n80, "fracao_vendedores_80pct": round(n80 / len(vendedores), 4),
                 "top10": vendedores.head(10).drop(columns="acumulado").to_dict("records")}
 print(f"{n80} de {len(vendedores)} vendedores ({n80 / len(vendedores):.1%}) respondem por 80% das postagens tardias")
+display(vendedores.head(10).drop(columns="acumulado"))
+
+# COMMAND ----------
 
 fig, ax = plt.subplots(figsize=(7, 3))
 x = (vendedores.index + 1) / len(vendedores) * 100
 ax.plot(x, vendedores.acumulado * 100, color=AZUL)
 ax.axhline(80, color=CINZA, ls="--", lw=1); ax.axvline(n80 / len(vendedores) * 100, color=LARANJA, ls="--", lw=1)
+ax.text(n80 / len(vendedores) * 100 + 1, 40, f"{n80} vendedores\n({n80 / len(vendedores):.0%} do total)", color=LARANJA, fontsize=8)
 ax.set_xlabel("% dos vendedores (ordenados por postagens tardias)"); ax.set_ylabel("% acumulado das postagens tardias")
-ax.set_title("P6 · Curva de Pareto das postagens tardias"); plt.tight_layout(); plt.show()
+ax.set_title("P6 · Um quarto dos vendedores gera 80% das postagens tardias")
+fechar("p6_pareto_vendedores")
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC ## Resumo para conciliação
-# MAGIC O JSON abaixo é comparado com o resultado do script independente `scripts/validacao_referencia.py`, escrito em pandas sem reaproveitar este código.
+# MAGIC O resumo é gravado no volume e comparado pelo script `scripts/conciliacao.py` com o resultado do script independente `scripts/validacao_referencia.py`, escrito em pandas sem reaproveitar este código.
 
 # COMMAND ----------
 
-print(json.dumps(resumo, ensure_ascii=False, default=str, indent=1))
+texto = json.dumps(resumo, ensure_ascii=False, default=str, indent=1)
+with open(f"{GRAFICOS}/resultado_databricks.json", "w", encoding="utf-8") as f:
+    f.write(texto)
+print(f"Resumo gravado em {GRAFICOS}/resultado_databricks.json ({len(texto)} caracteres)")

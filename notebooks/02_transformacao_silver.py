@@ -82,7 +82,7 @@ salvar(pedidos, "pedidos")
 
 # MAGIC %md
 # MAGIC ## Avaliações
-# MAGIC RN10: 551 pedidos têm mais de uma avaliação. Conserva-se a respondida por último; o empate vai para o maior `review_id`. A junção com o pedido passa a ser um-para-um.
+# MAGIC RN10: 547 pedidos têm mais de uma avaliação (551 linhas excedentes). Conserva-se a respondida por último; o empate vai para o maior `review_id`. A junção com o pedido passa a ser um-para-um.
 
 # COMMAND ----------
 

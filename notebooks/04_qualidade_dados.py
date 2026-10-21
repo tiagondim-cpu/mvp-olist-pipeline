@@ -39,11 +39,11 @@ for t in [r.tableName for r in spark.sql(f"SHOW TABLES IN {BRONZE}").collect() i
     vazio = lambda c: F.col(c).isNull() | (F.trim(F.col(c)) == "")
     r = df.agg(F.count("*").alias("_n"),
                *[F.sum(vazio(c).cast("int")).alias(f"nulo_{c}") for c in cols],
-               *[F.approx_count_distinct(c).alias(f"dist_{c}") for c in cols]).first()
+               *[F.countDistinct(c).alias(f"dist_{c}") for c in cols]).first()
     for c in cols:
         linhas.append({"tabela_origem": t, "atributo": c, "linhas": r["_n"], "ausentes": r[f"nulo_{c}"],
                        "pct_ausentes": round(100 * r[f"nulo_{c}"] / r["_n"], 2),
-                       "distintos_aprox": r[f"dist_{c}"]})
+                       "distintos": r[f"dist_{c}"]})
 dq_bronze = pd.DataFrame(linhas)
 gravar(dq_bronze, "dq_bronze_atributos")
 display(dq_bronze.sort_values("pct_ausentes", ascending=False))
@@ -73,7 +73,7 @@ for tabela, grupo in catalogo.groupby("tabela", sort=False):
     for r in grupo.itertuples():
         c = F.col(r.atributo)
         exprs += [F.sum(c.isNull().cast("int")).alias(f"nulo_{r.atributo}"),
-                  F.approx_count_distinct(c).alias(f"dist_{r.atributo}"),
+                  F.countDistinct(c).alias(f"dist_{r.atributo}"),
                   F.min(c).cast("string").alias(f"min_{r.atributo}"),
                   F.max(c).cast("string").alias(f"max_{r.atributo}"),
                   F.sum((c.isNotNull() & fora_do_dominio(c, tipos[r.atributo], r)).cast("int")).alias(f"fora_{r.atributo}")]
@@ -83,7 +83,7 @@ for tabela, grupo in catalogo.groupby("tabela", sort=False):
         linhas.append({"tabela": tabela, "atributo": r.atributo, "tipo": r.tipo, "linhas": agg["_n"],
                        "nulos": nulos, "pct_nulos": round(100 * nulos / agg["_n"], 2),
                        "obrigatorio": r.obrigatorio, "viola_obrigatoriedade": r.obrigatorio == "sim" and nulos > 0,
-                       "distintos_aprox": agg[f"dist_{r.atributo}"],
+                       "distintos": agg[f"dist_{r.atributo}"],
                        "minimo": agg[f"min_{r.atributo}"], "maximo": agg[f"max_{r.atributo}"],
                        "dominio": r.categorias or (f"[{r.dominio_min}, {r.dominio_max}]" if r.dominio_min else "livre"),
                        "fora_do_dominio": agg[f"fora_{r.atributo}"]})
