@@ -10,6 +10,7 @@
 
 import json
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FuncFormatter
 
 dbutils.widgets.text("catalogo", "workspace", "Catálogo do Unity Catalog")
 CATALOGO = dbutils.widgets.get("catalogo")
@@ -22,6 +23,8 @@ resumo = {}
 plt.rcParams.update({"figure.dpi": 110, "axes.spines.top": False, "axes.spines.right": False,
                      "axes.titlesize": 10.5, "axes.titleweight": "bold", "font.size": 9})
 AZUL, CINZA, LARANJA = "#1f5f99", "#9aa5b1", "#d9822b"
+br = lambda x, casas=1: f"{x:,.{casas}f}".replace(",", "X").replace(".", ",").replace("X", ".")
+eixo_br = FuncFormatter(lambda v, _: br(v, 0) if float(v).is_integer() else br(v, 1))
 
 def fechar(nome):
     plt.tight_layout()
@@ -55,10 +58,10 @@ fig, ax = plt.subplots(figsize=(9, 3.4))
 ax.bar(mensal.ano_mes, mensal.taxa_atraso * 100, color=[LARANJA if t > 0.10 else AZUL for t in mensal.taxa_atraso])
 media = global_.taxa_atraso[0] * 100
 ax.axhline(media, color=CINZA, ls="--", lw=1)
-ax.text(0, media + 0.5, f"média do período: {media:.1f}%", color="#555", fontsize=8)
+ax.text(0, media + 0.5, f"média do período: {br(media)}%", color="#555", fontsize=8)
 for x, t in zip(mensal.ano_mes, mensal.taxa_atraso):
     if t > 0.10: ax.text(x, t * 100 + 0.3, f"{t:.0%}", ha="center", fontsize=8, color=LARANJA, fontweight="bold")
-ax.set_ylabel("% entregue depois do prometido")
+ax.set_ylabel("% entregue depois do prometido"); ax.yaxis.set_major_formatter(eixo_br)
 ax.set_title("P1 · O atraso não é crônico: concentra-se em três meses (nov/2017, fev/2018 e mar/2018)")
 ax.tick_params(axis="x", rotation=60)
 fechar("p1_taxa_atraso_mensal")
@@ -95,13 +98,14 @@ display(etapas)
 fig, ax = plt.subplots(figsize=(8, 2.6))
 for i, g in enumerate(etapas.itertuples()):
     esquerda = 0
-    for etapa, cor in [("aprovacao", CINZA), ("postagem", LARANJA), ("transporte", AZUL)]:
+    for etapa, rotulo, cor in [("aprovacao", "aprovação", CINZA), ("postagem", "postagem pelo vendedor", LARANJA), ("transporte", "transporte", AZUL)]:
         v = getattr(g, etapa)
-        ax.barh(g.grupo, v, left=esquerda, color=cor, label=etapa if i == 0 else None)
-        if v > 1: ax.text(esquerda + v / 2, i, f"{v:.1f}", va="center", ha="center", color="white", fontweight="bold")
+        ax.barh(g.grupo, v, left=esquerda, color=cor, label=rotulo if i == 0 else None)
+        if v > 1: ax.text(esquerda + v / 2, i, br(v), va="center", ha="center", color="white", fontweight="bold")
         esquerda += v
     ax.text(esquerda + 0.4, i, f"prometido: {g.prometido:.0f} dias", va="center", fontsize=8, color="#555")
-ax.set_xlabel("dias (mediana de cada etapa)"); ax.legend(frameon=False, ncol=3, loc="lower right")
+ax.set_xlabel("dias (mediana de cada etapa)")
+ax.legend(frameon=False, ncol=3, loc="upper center", bbox_to_anchor=(0.5, -0.32))
 ax.set_title("P2 · O atraso nasce no transporte: 26 dias nos atrasados contra 7 nos pedidos no prazo")
 fechar("p2_etapas_lead_time")
 
@@ -144,7 +148,7 @@ display(distancia)
 fig, ax = plt.subplots(figsize=(8, 3.6))
 ax.barh(top10.rota[::-1], top10.taxa_atraso[::-1] * 100, color=[LARANJA if r == "SP->RJ" else AZUL for r in top10.rota[::-1]])
 for y, (t, n, p) in enumerate(zip(top10.taxa_atraso[::-1], top10.pedidos[::-1], top10.participacao_atrasos[::-1])):
-    ax.text(t * 100 + 0.3, y, f"{t:.1%} · {n:,} pedidos · {p:.1%} dos atrasos".replace(",", "."), va="center", fontsize=7.5)
+    ax.text(t * 100 + 0.3, y, f"{br(t * 100)}% · {br(n, 0)} pedidos · {br(p * 100)}% dos atrasos", va="center", fontsize=7.5)
 ax.axvline(global_.taxa_atraso[0] * 100, color=CINZA, ls="--", lw=1)
 ax.set_xlim(0, 30); ax.set_xlabel("% entregue depois do prometido (tracejado: média geral)")
 ax.set_title("P3 · Dez rotas com maior atraso; SP->RJ sozinha responde por 17,6% de todos os atrasos")
@@ -173,7 +177,9 @@ display(calibracao)
 fig, ax = plt.subplots(figsize=(7, 4.4))
 ax.scatter(calibracao.folga_mediana, calibracao.taxa_atraso * 100, s=calibracao.pedidos / 60 + 15, color=AZUL, alpha=.7)
 for r in calibracao.itertuples():
-    ax.annotate(r.uf, (r.folga_mediana, r.taxa_atraso * 100), fontsize=8, xytext=(3, 3), textcoords="offset points")
+    deslocamento = (3, -10) if r.uf == "MT" else (3, 3)
+    ax.annotate(r.uf, (r.folga_mediana, r.taxa_atraso * 100), fontsize=8, xytext=deslocamento, textcoords="offset points")
+ax.yaxis.set_major_formatter(eixo_br)
 ax.set_xlabel("folga mediana (dias entregues antes do prometido)"); ax.set_ylabel("% entregue depois do prometido")
 ax.set_title("P4 · A promessa folga de 10 a 22 dias na mediana e, ainda assim, falha até 21% no Nordeste")
 fechar("p4_calibracao_promessa")
@@ -197,12 +203,12 @@ display(avaliacao)
 
 # COMMAND ----------
 
-fig, ax = plt.subplots(figsize=(7, 3))
+fig, ax = plt.subplots(figsize=(7.5, 3))
 barras = ax.bar(avaliacao.faixa_atraso, avaliacao.taxa_avaliacao_ruim * 100,
                 color=[AZUL] + [LARANJA] * (len(avaliacao) - 1))
-ax.bar_label(barras, labels=[f"{t:.0%}\nnota {n:.1f}" for t, n in zip(avaliacao.taxa_avaliacao_ruim, avaliacao.nota_media)], fontsize=8)
+ax.bar_label(barras, labels=[f"{t:.0%}\nnota {br(n)}" for t, n in zip(avaliacao.taxa_avaliacao_ruim, avaliacao.nota_media)], fontsize=8)
 ax.set_ylabel("% de avaliações 1 ou 2"); ax.set_ylim(0, 100)
-ax.set_title("P5 · Quatro dias de atraso bastam para que dois em cada três clientes avaliem mal")
+ax.set_title("P5 · Com 4 dias de atraso, dois em cada três clientes já avaliam mal")
 fechar("p5_avaliacao_por_atraso")
 
 # COMMAND ----------
