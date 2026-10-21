@@ -39,8 +39,8 @@ def main():
         run = cli("jobs", "list-runs", "--job-id", str(job_id), "--limit", "1", perfil=a.perfil)[0]
         run = cli("jobs", "get-run", str(run["run_id"]), perfil=a.perfil)
     else:
-        repo = next(r for r in cli("repos", "list", perfil=a.perfil) if r["path"] == REPO)
-        cli("repos", "update", str(repo["id"]), "--branch", "main", perfil=a.perfil)
+        repo_id = cli("workspace", "get-status", REPO, perfil=a.perfil)["object_id"]
+        cli("repos", "update", str(repo_id), "--branch", "main", perfil=a.perfil)
         run = cli("jobs", "run-now", str(job_id), "--timeout", "60m", perfil=a.perfil)
     print("Execução", run["run_id"], run["state"].get("result_state"), run.get("run_page_url"))
 
