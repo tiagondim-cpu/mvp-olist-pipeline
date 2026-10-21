@@ -1,0 +1,32 @@
+{
+  "name": "mvp_olist_pipeline",
+  "description": "MVP UnB, Tiago Andre Gondim (231013476): coleta, bronze, silver, gold, qualidade e análise dos dados da Olist",
+  "max_concurrent_runs": 1,
+  "parameters": [{ "name": "catalogo", "default": "workspace" }],
+  "tasks": [
+    {
+      "task_key": "01_coleta_bronze",
+      "notebook_task": { "notebook_path": "/Workspace/Users/tiagondim@gmail.com/mvp-olist-pipeline/notebooks/01_coleta_bronze" }
+    },
+    {
+      "task_key": "02_transformacao_silver",
+      "depends_on": [{ "task_key": "01_coleta_bronze" }],
+      "notebook_task": { "notebook_path": "/Workspace/Users/tiagondim@gmail.com/mvp-olist-pipeline/notebooks/02_transformacao_silver" }
+    },
+    {
+      "task_key": "03_modelo_gold",
+      "depends_on": [{ "task_key": "02_transformacao_silver" }],
+      "notebook_task": { "notebook_path": "/Workspace/Users/tiagondim@gmail.com/mvp-olist-pipeline/notebooks/03_modelo_gold" }
+    },
+    {
+      "task_key": "04_qualidade_dados",
+      "depends_on": [{ "task_key": "03_modelo_gold" }],
+      "notebook_task": { "notebook_path": "/Workspace/Users/tiagondim@gmail.com/mvp-olist-pipeline/notebooks/04_qualidade_dados" }
+    },
+    {
+      "task_key": "05_analise_perguntas",
+      "depends_on": [{ "task_key": "04_qualidade_dados" }],
+      "notebook_task": { "notebook_path": "/Workspace/Users/tiagondim@gmail.com/mvp-olist-pipeline/notebooks/05_analise_perguntas" }
+    }
+  ]
+}

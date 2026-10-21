@@ -69,7 +69,7 @@ Kaggle (9 CSV) ──► Volume UC ──► BRONZE ──────► SILVER
    01_coleta_bronze             02_transformacao_silver   03_modelo_gold   04_qualidade_dados   05_analise_perguntas
 ```
 
-Os cinco notebooks rodam em sequência como um *job* do Lakeflow Jobs (`scripts/job_pipeline_olist.yml`). Cada notebook termina com verificações que interrompem o job se algo sair do esperado: contagens da bronze iguais às dos arquivos, chaves únicas na silver, catálogo idêntico ao modelo na gold e integridade referencial na qualidade.
+Os cinco notebooks rodam em sequência como um *job* do Lakeflow Jobs (`scripts/job_pipeline_olist.json`). Cada notebook termina com verificações que interrompem o job se algo sair do esperado: contagens da bronze iguais às dos arquivos, chaves únicas na silver, catálogo idêntico ao modelo na gold e integridade referencial na qualidade.
 
 ## 4. Modelagem
 
@@ -93,7 +93,7 @@ As 19 regras de negócio aplicadas na transformação, como conversões de data,
 
 1. Crie uma conta gratuita no [Databricks Free Edition](https://www.databricks.com/learn/free-edition).
 2. Em **Workspace > Create > Git folder**, informe a URL deste repositório.
-3. Abra `notebooks/01_coleta_bronze` e execute; depois 02, 03, 04 e 05, nesta ordem. Alternativamente, crie o job descrito em `scripts/job_pipeline_olist.yml`.
+3. Abra `notebooks/01_coleta_bronze` e execute; depois 02, 03, 04 e 05, nesta ordem. Alternativamente, crie o job descrito em `scripts/job_pipeline_olist.json`.
 4. O parâmetro `catalogo` (padrão `workspace`) define o catálogo de destino.
 
 ## Estrutura do repositório
