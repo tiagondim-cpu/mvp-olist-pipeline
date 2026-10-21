@@ -14,8 +14,6 @@ Pipeline de dados em nuvem (Databricks Free Edition, arquitetura medalhão com D
 | Plataforma | Databricks Free Edition (Spark, Delta Lake, Unity Catalog, Lakeflow Jobs) |
 | Apresentação | [`apresentacao/`](apresentacao/) (PDF e PowerPoint) |
 
-> **Relação com atividade anterior.** A base Olist foi usada, numa análise exploratória em notebook, na atividade de PSP3 (EPR0074), que estudou só a relação entre atraso e nota. Este MVP é um trabalho novo: tem outra pergunta central (onde o prazo falha e quem deve agir), uma hipótese própria, cinco perguntas que não estavam naquela atividade e um pipeline em nuvem com modelagem, catálogo e qualidade. A pergunta P5 reproduz, agora dentro do pipeline, o resultado daquela análise, e os números coincidem, o que funciona como verificação cruzada.
-
 ## Resumo executivo
 
 **A hipótese de partida foi refutada: o atraso nasce no transporte, não no vendedor.** Dos pedidos entregues fora do prazo, 72,1% foram postados pelo vendedor dentro do prazo-limite. Nos pedidos atrasados, a mediana do transporte foi de 26,2 dias, contra 7,0 dias nos pedidos entregues no prazo. Mesmo que todos os vendedores postassem em dia, a taxa de atraso cairia no máximo de 6,8% para 4,9%.
